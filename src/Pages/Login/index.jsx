@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { Col, Container, Row } from 'react-bootstrap';
 import grid_img from '../../assets/Login/Gird.svg';
 import logo from '../../assets/Login/Logo.svg';
@@ -29,6 +30,7 @@ const Login = () => {
         isValidPassword : true,
     }
     const [isValidInput, setIsValidInput] = useState(defaultValid)
+    const navigate = useNavigate();
 
     const handleSubmit = async(event) => {
         event.preventDefault();
@@ -48,7 +50,6 @@ const Login = () => {
             toast.error("Please enter your password.");
             return;
         }
-        
         const dangerousCharacters = /['"<>`]/;
         if (dangerousCharacters.test(email) && dangerousCharacters.test(password)) {
             toast.error('Invalid input: Input contains dangerous characters');
@@ -56,11 +57,11 @@ const Login = () => {
             setEmail(email.trim());
             setPassword(password.trim());
             const credentials = { email, password };
-            const res = await authApi.login(credentials).then((res)=>{
-                if (res.data.status !== 200) {
+            await authApi.login(credentials).then((res)=>{
+                if (res.status == 400) {
                     navigate('/login', { state: res.data });
-                } else if (res.data.status === 200) {
-                    Localstorage.setItem('token', res.data.data);
+                } else if (res.status === 200) {
+                    localStorage.setItem('token', res.data.token);
                     navigate('/');
                 }
             });
