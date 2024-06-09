@@ -10,6 +10,7 @@ import CreateFEQuestions from './components/CreateFEQuestions';
 import CreateRoomInfo from './components/CreateRoomInfo';
 import { initialRoomInfo, FEInitQuestion, BEInitQuestion } from './initialData';
 import * as St from './styles';
+import {Link} from "react-router-dom";
 
 const CreateRoom = () => {
     // Create question
@@ -68,7 +69,9 @@ const CreateRoom = () => {
             )}
 
             <Stack direction="horizontal" gap={3} className="justify-content-end mb-4">
-                <ButtonStyled buttonType="secondary">Cancel</ButtonStyled>
+                <Link to="/admin/room" >
+                    <ButtonStyled buttonType="secondary">Cancel</ButtonStyled>
+                </Link>
                 <ButtonStyled buttonType="solid" onClick={handleSubmit}>
                     Create
                 </ButtonStyled>
