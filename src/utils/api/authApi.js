@@ -4,12 +4,13 @@ import authHeader from './HeaderAuthorization';
 
 const authApi = {
     login: async (credential) => {
-        const endpoint = `/auth/login/${credential}`;
-        // eslint-disable-next-line no-return-await
-
-        return await get(endpoint, {}, {})
+        const endpoint = `/auth/login`;
+        return await post(endpoint, credential, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
             .then((res) => {
-                // if (res.data.code !== 200) console.log(res.response);
                 return res;
             })
             .catch((err) => {
