@@ -68,7 +68,7 @@ const AllAccounts = () => {
             let req = {
                 roomId: id,
                 page: currentPage,
-                limit: 100,
+                limit: 10,
                 search: searchValue,
                 [filter.isActive]: status === '' ? null : status,
                 [filter.room]: filterRoom,
@@ -86,7 +86,7 @@ const AllAccounts = () => {
         <div className="p-2">
             <RoomStyle>
                 <div className="box-style">
-                    <Col className="p-3">
+                    <Col className="p-4">
                         <Row className="color-primary mb-3">
                             <h3 className="fw-bold">User Management</h3>
                         </Row>
@@ -122,6 +122,7 @@ const AllAccounts = () => {
                                         <th>Phone</th>
                                         <th>Date of Birth</th>
                                         <th>Join at</th>
+                                        <th>Role</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -133,9 +134,10 @@ const AllAccounts = () => {
                                             <td>{account.email}</td>
                                             <td>{account.phone}</td>
                                             <td>{DateFormatS(account.dob)} </td>
-                                            <td>01/01/2022</td>
+                                            <td>{account.createdAt}</td>
+                                            <td>{account.role}</td>
                                             <td className="d-flex" style={{ alignItems: 'center' }}>
-                                                {account.isActive ? (
+                                                {account.isEnabled ? (
                                                     <span className="accounts isActive">
                                                         Active
                                                     </span>
@@ -149,6 +151,18 @@ const AllAccounts = () => {
                                         </tr>
                                     ))}
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>Student ID</th>
+                                        <th>Student Name</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Date of Birth</th>
+                                        <th>Join at</th>
+                                        <th>Role</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </tfoot>
                             </Table>
                         </Row>
                     </Col>

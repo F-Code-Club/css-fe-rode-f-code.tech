@@ -12,7 +12,7 @@ const Search = ({ action, value }) => {
                     </Button>
                     <input
                         className="border-0 rounded-pill dishover form-control rfs"
-                        placeholder="Search room..."
+                        placeholder="Search User..."
                         type="text"
                         value={value}
                         name="search"
