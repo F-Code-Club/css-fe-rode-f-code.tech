@@ -129,7 +129,7 @@ const AllAccounts = () => {
                                     {accounts.map((account) => (
                                         <tr key={account.id}>
                                             <td>{account.studentId}</td>
-                                            <td>{account.fname + ' ' + account.lname}</td>
+                                            <td>{account.fullName}</td>
                                             <td>{account.email}</td>
                                             <td>{account.phone}</td>
                                             <td>{DateFormatS(account.dob)} </td>

@@ -3,7 +3,7 @@ import authHeader from './HeaderAuthorization';
 
 const accountsApi = {
     getAll: async (req) => {
-        const endpoint = `/accounts/get-all`;
+        const endpoint = `/api/v2/accounts/get-all`;
         // eslint-disable-next-line no-return-await
 
         return await get(endpoint, req, authHeader())
@@ -16,7 +16,7 @@ const accountsApi = {
             });
     },
     postActive: async (id) => {
-        const endpoint = `/accounts/toggle-active/${id}`;
+        const endpoint = `/api/v2/accounts/toggle-active/${id}`;
 
         return await post(endpoint, {}, {}, authHeader())
             .then((res) => {
