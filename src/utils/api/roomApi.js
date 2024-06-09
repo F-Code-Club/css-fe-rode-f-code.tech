@@ -4,7 +4,7 @@ import localFileApi from './localFileApi';
 
 const roomApi = {
     userGetAllRoom: async (data) => {
-        const endpoint = `/rooms/user-get-all`;
+        const endpoint = `/api/v2/rooms/user-get-all`;
         // eslint-disable-next-line no-return-await
 
         return await get(endpoint, data, authHeader())
@@ -18,11 +18,11 @@ const roomApi = {
     },
     getAllRoomType: async () => {
         const token = localStorage.getItem('token');
-        const endpoint = `/rooms/get-all-room-type`;
+        const endpoint = `/api/v2/rooms/get-all-room-type`;
         return await get(endpoint, {}, { Authorization: 'Bearer ' + token });
     },
     getRoomByCode: async (code) => {
-        const endpoint = `/rooms/get-one-by-code/${code}`;
+        const endpoint = `/api/v2/rooms/get-one-by-code/${code.toUpperCase()}`;
         return await get(endpoint, {}, authHeader())
             .then((res) => {
                 return res;
@@ -32,7 +32,7 @@ const roomApi = {
             });
     },
     getRoomById: async (roomID) => {
-        const endpoint = `/rooms/get-one-by-id/${roomID}`;
+        const endpoint = `/api/v2/rooms/get-one-by-id/${roomID}`;
         return await get(endpoint, {}, authHeader())
             .then((res) => {
                 return res;
@@ -42,7 +42,7 @@ const roomApi = {
             });
     },
     adminGetAll: async (req) => {
-        const endpoint = `/rooms/admin-get-all`;
+        const endpoint = `/api/v2/rooms/admin-get-all`;
         // eslint-disable-next-line no-return-await
 
         return await get(endpoint, req, authHeader())
@@ -56,14 +56,14 @@ const roomApi = {
     },
     createOne: async (data) => {
         const token = localStorage.getItem('token');
-        const endpoint = `/rooms/create-one`;
+        const endpoint = `/api/v2/rooms/create-one`;
         return await post(endpoint, data, {}, { Authorization: 'Bearer ' + token })
             .then((res) => res)
             .catch((err) => err);
     },
     updateRoomById: async (roomID, data) => {
         const token = localStorage.getItem('token');
-        const endpoint = `/rooms/update-one-by-id/${roomID}`;
+        const endpoint = `/api/v2/rooms/update-one-by-id/${roomID}`;
         // eslint-disable-next-line no-return-await
 
         return await post(endpoint, data, {}, { Authorization: 'Bearer ' + token })
@@ -77,7 +77,7 @@ const roomApi = {
             });
     },
     getAllRomType: async () => {
-        const endpoint = `/rooms/get-all-room-type`;
+        const endpoint = `/api/v2/rooms/get-all-room-type`;
         // eslint-disable-next-line no-return-await
 
         return await get(endpoint, {}, authHeader())
