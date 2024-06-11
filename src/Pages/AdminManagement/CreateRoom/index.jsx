@@ -11,16 +11,23 @@ import CreateRoomInfo from './components/CreateRoomInfo';
 import { initialRoomInfo, FEInitQuestion, BEInitQuestion } from './initialData';
 import * as St from './styles';
 import {Link} from "react-router-dom";
+import CreateSelectQuestion from "./components/CreateSelectQuestion.jsx";
 
 const CreateRoom = () => {
     // Create question
     const [roomInfo, setRoomInfo] = useState(initialRoomInfo);
-    const [questions, setQuestions] = useState(BEInitQuestion);
+    const [questions, setQuestions] = useState([]);
+    const [chooseQuestion, setChooseQuestion] = useState('');
     const [errors, setErrors] = useState([]);
+
+    useEffect(() => {
+        roomInfo.questionStackId = chooseQuestion;
+    }, [chooseQuestion]);
 
     // Submit
     const handleSubmit = async () => {
-        const payload = { ...roomInfo, questions };
+        // const payload = { ...roomInfo, questions };
+        const payload = roomInfo;
         console.log('Payload: ', payload);
         await roomApi
             .createOne(payload)
@@ -46,27 +53,28 @@ const CreateRoom = () => {
     };
 
     // Re-render when room type change
-    useEffect(() => {
-        setQuestions(roomInfo.type === 'FE' ? FEInitQuestion : BEInitQuestion);
-    }, [roomInfo.type]);
+    // useEffect(() => {
+    //     setQuestions(roomInfo.type === 'FE' ? FEInitQuestion : BEInitQuestion);
+    // }, [roomInfo.type]);
 
     return (
         <St.Wrapper>
             <St.Title>Create Room</St.Title>
             <CreateRoomInfo roomInfo={roomInfo} setRoomInfo={setRoomInfo} errs={errors} />
-            {roomInfo.type === 'FE' ? (
-                <CreateFEQuestions
-                    questions={questions}
-                    setQuestions={setQuestions}
-                    error={errors.find((err) => err.at === 'questions')?.chidren}
-                />
-            ) : (
-                <CreateBEQuestions
-                    questions={questions}
-                    setQuestions={setQuestions}
-                    error={errors.find((err) => err.at === 'questions')?.chidren}
-                />
-            )}
+            <CreateSelectQuestion questions={questions} chooseQuestion={chooseQuestion} setChooseQuestion={setChooseQuestion} setQuestions={setQuestions} errs={errors} />
+            {/*{roomInfo.type === 'FE' ? (*/}
+            {/*    <CreateFEQuestions*/}
+            {/*        questions={questions}*/}
+            {/*        setQuestions={setQuestions}*/}
+            {/*        error={errors.find((err) => err.at === 'questions')?.chidren}*/}
+            {/*    />*/}
+            {/*) : (*/}
+            {/*    <CreateBEQuestions*/}
+            {/*        questions={questions}*/}
+            {/*        setQuestions={setQuestions}*/}
+            {/*        error={errors.find((err) => err.at === 'questions')?.chidren}*/}
+            {/*    />*/}
+            {/*)}*/}
 
             <Stack direction="horizontal" gap={3} className="justify-content-end mb-4">
                 <Link to="/admin/room" >

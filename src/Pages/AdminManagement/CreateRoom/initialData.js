@@ -7,6 +7,7 @@ const initialRoomInfo = {
     type: '',
     isPrivate: '',
     duration: 0,
+    questionStackId: ''
 };
 
 const BEInitQuestion = [

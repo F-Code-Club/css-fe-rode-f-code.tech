@@ -42,7 +42,20 @@ const roomApi = {
             });
     },
     adminGetAll: async (req) => {
-        const endpoint = `/api/v2/rooms/admin-get-all`;
+        const endpoint = `/api/v2/rooms`;
+        // eslint-disable-next-line no-return-await
+
+        return await get(endpoint, req, authHeader())
+            .then((res) => {
+                // if (res.data.code !== 200) console.log(res.response);
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
+    adminGetQuestions: async (req) => {
+        const endpoint = `/api/v2/question-stacks`;
         // eslint-disable-next-line no-return-await
 
         return await get(endpoint, req, authHeader())
@@ -56,7 +69,7 @@ const roomApi = {
     },
     createOne: async (data) => {
         const token = localStorage.getItem('token');
-        const endpoint = `/api/v2/rooms/create-one`;
+        const endpoint = `/api/v2/rooms`;
         return await post(endpoint, data, {}, { Authorization: 'Bearer ' + token })
             .then((res) => res)
             .catch((err) => err);
