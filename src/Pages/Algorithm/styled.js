@@ -193,7 +193,7 @@ export const WrapperStyle = styled.div`
         border: 2px dashed yellow;
     }
 `;
-export const BoxEditor = styled.div`
+export const BoxEditor1 = styled.div`
     width: 100%;
     display: inline-block;
     /* height: calc(100vh - 290px); */
@@ -337,4 +337,191 @@ export const WrapRightSection = styled.div`
     }
 
     /* overflow-y: scroll; */
+`;
+//////////////////// 2024 ////////////////////////
+export const Board1 = styled.div`
+  background-color: #262626;
+  display: flex;
+  height: 100vh;
+  padding: 20px;
+`;
+
+export const LeftSection1 = styled.div`
+  flex: 1;
+  padding: 20px;
+  color: #fff;
+  overflow-y: auto;
+`;
+
+export const RightSection1 = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 20px;
+`;
+
+export const DescriptionWrapper = styled.div`
+  padding: 20px;
+  background-color: #262626;
+  
+  height: 100%;
+  overflow-y: auto;
+`;
+
+export const DescriptionHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+export const QuestionSelect = styled.select`
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #fff;
+  background-color: #262626;
+`;
+
+export const DescriptionTitle = styled.h1`
+  font-size: 1.5em;
+  margin-bottom: 10px;
+  color: #fff;
+`;
+
+export const DescriptionText = styled.p`
+  font-size: 1.2em;
+  margin-bottom: 20px;
+  color: #fff;
+`;
+
+export const ExamplesTitle = styled.h3`
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #fff;
+`;
+
+export const ExampleItem = styled.div`
+  background-color: #262626;
+  padding: 10px;
+  border: 1px solid #00e7aa;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  
+  p {
+    margin: 0;
+    font-size: 1em;
+    color: #fff;
+  }
+`;
+
+export const ConstraintsTitle = styled.h3`
+  font-size: 1.2em;
+  margin-bottom: 10px;
+  color: #fff;
+`;
+
+export const ConstraintsList = styled.ul`
+  padding-left: 20px;
+  font-size: 1.2em;
+  color: #fff;
+  
+  li {
+    margin-bottom: 5px;
+  }
+`;
+
+export const ButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+`;
+
+export const TestStatus = styled.div`
+  color: ${(props) => (props.status === 'Accepted' ? '#00e7aa' : 'red')};
+  font-weight: bold;
+  margin-top: 10px;
+`;
+
+export const EditorAndTestWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+`;
+
+export const BoxEditor = styled.div`
+  flex: 1;
+  height: ${(props) => (props.showResult ? '40vh' : 'calc(100vh - 250px)')};
+  max-height: ${(props) => (props.showResult ? '40vh' : 'calc(100vh - 250px)')};
+  overflow-y: auto;
+`;
+
+export const TabsWrapper = styled.div`
+  display: flex;
+  margin-top: 10px;
+  background-color: #262626;
+`;
+
+export const TabButton = styled.button`
+  flex: 1;
+  padding: 12px 16px; /* Adjusted padding for better button size */
+  background: ${(props) => (props.active ? '#198754' : '#262626')};
+  color: ${(props) => (props.active ? '#fff' : '#fff')};
+  border: 1px solid #dee2e6;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  &:hover {
+    background: ${(props) => (props.active ? '#198754' : '#00e7aa')};
+    color: #fff;
+  }
+`;
+
+
+export const TabContent = styled.div`
+  padding: 20px; /* Increased padding for better spacing */
+  background: #262626;
+  border: 1px solid #dee2e6;
+  border-top: none;
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+`;
+
+
+export const TestCase = styled.div`
+  background-color: #323232;
+  padding: 15px; /* Increased padding for better spacing */
+  border-radius: 10px;
+  margin-bottom: 15px; /* Increased margin-bottom for better separation */
+  display: flex;
+  flex-direction: column;
+`;
+
+
+export const CaseNavigation = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start; /* Align buttons to the start */
+  align-items: flex-start; /* Align items to the start */
+`;
+
+export const CaseButton = styled.button`
+  flex: 1;
+  padding: 5px;
+  background: ${(props) => (props.active ? '#198754' : '#171717')}; /* Updated to the specified green color */
+  color: ${(props) => (props.active ? '#fff' : '#fff')};
+  cursor: pointer;
+  &:hover {
+    background: #198754; /* Updated to the specified green color */
+    color: #fff;
+  }
+  &:disabled {
+    background: #f8f9fa;
+    color: #000;
+    cursor: not-allowed;
+  }
 `;

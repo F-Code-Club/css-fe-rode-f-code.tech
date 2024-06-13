@@ -163,6 +163,7 @@ export const OptionStyled = styled.option``;
 export const Timer = styled.div`
     width: 200px;
     display: flex;
+    align-items: center;
     gap: 10px;
     padding: 0.375rem 2.25rem 0.375rem 0.75rem;
     border: 2px solid #00e7aa;
