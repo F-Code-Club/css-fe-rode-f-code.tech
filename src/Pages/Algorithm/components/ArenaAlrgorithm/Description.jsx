@@ -11,8 +11,27 @@ import {
 } from "../../styled";
 import { Timer, Title } from "../LeaderBoard/styled";
 import CountdownTimer from "../../../CssBattle/components/CountDown";
-
+import { fetchQuestionStack } from "../../../../utils/api/questionStackAPI";
+import { useEffect, useState } from "react";
 const Description = ({ questionData, questions, setCurrentQuestion }) => {
+  const [activeQuestionStacks, setActiveQuestionStacks] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const stackId = "66a5cb23-8910-4538-82ff-7c57e5c67e5f"; // Replace with the actual stack ID you want to fetch
+      const data = await fetchQuestionStack(stackId);
+      if (data) {
+        console.log("data", data);
+        setActiveQuestionStacks(data);
+      } else {
+        console.log("no data found");
+      }
+    };
+
+    fetchData();
+  }, []);
+    
+
   return (
     <DescriptionWrapper>
       <DescriptionHeader>

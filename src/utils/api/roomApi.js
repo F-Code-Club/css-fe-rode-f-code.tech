@@ -9,7 +9,7 @@ const roomApi = {
 
         return await get(endpoint, data, authHeader())
             .then((res) => {
-                // if (res.data.code !== 200) console.log(res.response);
+                if (res.data.code !== 200) console.log(res.response);
                 return res;
             })
             .catch((err) => {

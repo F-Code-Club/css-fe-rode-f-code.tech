@@ -11,9 +11,12 @@ import {
     BoxEditor,
     TabsWrapper,
     TabButton,
-    TabContent,
     TestCase,
     CaseNavigation,
+    TestSectionWrapper,
+    TestCasesSection,
+    TestResultsSection,
+    TestContent,
     CaseButton,
 } from '../../styled';
 
@@ -23,6 +26,7 @@ import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CodeMirror from '@uiw/react-codemirror';
 
 const CodeAndTestSection = ({ questionData, onSubmit }) => {
+    
     const [code, setCode] = useState(questionData.codeTemplate);
     const [selectedLanguage, setSelectedLanguage] = useState('java');
     const [currentCase, setCurrentCase] = useState(0);
@@ -113,80 +117,77 @@ const CodeAndTestSection = ({ questionData, onSubmit }) => {
                 />
             </BoxEditor>
 
-            <TabsWrapper>
-                <TabButton
-                    active={activeTab === 'testCases'}
-                    onClick={() => setActiveTab('testCases')}
-                >
-                    Test Cases
-                </TabButton>
-                <TabButton
-                    active={activeTab === 'testResults'}
-                    onClick={() => setActiveTab('testResults')}
-                >
-                    Test Results
-                </TabButton>
-            </TabsWrapper>
+            <TestSectionWrapper>
+                <TabsWrapper>
+                    <TabButton
+                        active={activeTab === 'testCases'}
+                        onClick={() => setActiveTab('testCases')}
+                    >
+                        Test Cases
+                    </TabButton>
+                    <TabButton
+                        active={activeTab === 'testResults'}
+                        onClick={() => setActiveTab('testResults')}
+                    >
+                        Test Results
+                    </TabButton>
+                </TabsWrapper>
 
-            <TabContent>
-                {activeTab === 'testCases' && (
-                    <>
-                        <TestCase>
-                            <p>Case {currentCase + 1}:</p>
-                        </TestCase>
-                        <TestCase>
-                            <p>Input: {testResults[currentCase].input}</p>
-                        </TestCase>
-                        <TestCase>
-                            <p>Output: {testResults[currentCase].output}</p>
-                        </TestCase>
-                        <CaseNavigation>
-                            {testResults.map((_, index) => (
-                                <CaseButton
-                                    key={index}
-                                    active={index === currentCase}
-                                    onClick={() => setCurrentCase(index)}
-                                >
-                                   Case {index + 1}
-                                </CaseButton>
-                            ))}
-                        </CaseNavigation>
-                    </>
-                )}
+                <TestContent>
+                    {activeTab === 'testCases' && (
+                        <TestCasesSection>
+                            <CaseNavigation>
+                                {testResults.map((_, index) => (
+                                    <CaseButton
+                                        key={index}
+                                        active={index === currentCase}
+                                        onClick={() => setCurrentCase(index)}
+                                    >
+                                        Case {index + 1}
+                                    </CaseButton>
+                                ))}
+                            </CaseNavigation>
+                            <TestCase>
+                                <h4>Input</h4>
+                                <p>{testResults[currentCase].input}</p>
+                            </TestCase>
+                            <TestCase>
+                                <h4>Output</h4>
+                                <p>{testResults[currentCase].output}</p>
+                            </TestCase>
+                        </TestCasesSection>
+                    )}
 
-                {activeTab === 'testResults' && (
-                    <>
-                        <TestStatus status={testResults[currentCase].status}>
-                            {testResults[currentCase].status}
-                        </TestStatus>
-                        <br />
-                        <TestCase>
-                            <p>Case {currentCase + 1}:</p>
-                        </TestCase>
-                        <TestCase>
-                            <p>Input: {testResults[currentCase].input}</p>
-                        </TestCase>
-                        <TestCase>
-                            <p>Output: {testResults[currentCase].output}</p>
-                        </TestCase>
-                        
-                        <CaseNavigation>
-                            {testResults.map((_, index) => (
-                                <CaseButton
-                                    key={index}
-                                    active={index === currentCase}
-                                    onClick={() => setCurrentCase(index)}
-                                >
-                                  Case  {index + 1 } 
-                                </CaseButton>
-                            ))}
-                        </CaseNavigation>
-                    </>
-                )}
-            </TabContent>
-
+                    {activeTab === 'testResults' && (
+                        <TestResultsSection>
+                            <TestStatus status={testResults[currentCase].status}>
+                                {testResults[currentCase].status}
+                            </TestStatus>
+                            <CaseNavigation>
+                                {testResults.map((_, index) => (
+                                    <CaseButton
+                                        key={index}
+                                        active={index === currentCase}
+                                        onClick={() => setCurrentCase(index)}
+                                    >
+                                        Case {index + 1}
+                                    </CaseButton>
+                                ))}
+                            </CaseNavigation>
+                            <TestCase>
+                                <h4>Input</h4>
+                                <p>{testResults[currentCase].input}</p>
+                            </TestCase>
+                            <TestCase>
+                                <h4>Output</h4>
+                                <p>{testResults[currentCase].output}</p>
+                            </TestCase>
+                        </TestResultsSection>
+                    )}
+                </TestContent>
+            </TestSectionWrapper>
             <ButtonWrapper>
-            
+
                 <ButtonStyled buttonType="outline2" onClick={submitCode} disabled={!submitStatus}>
                     {submitStatus ? 'SUBMIT' : <Spinner size="sm" />}
                 </ButtonStyled>

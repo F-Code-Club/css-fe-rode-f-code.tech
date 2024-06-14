@@ -492,36 +492,101 @@ export const TabContent = styled.div`
 `;
 
 
-export const TestCase = styled.div`
-  background-color: #323232;
-  padding: 15px; /* Increased padding for better spacing */
-  border-radius: 10px;
-  margin-bottom: 15px; /* Increased margin-bottom for better separation */
-  display: flex;
-  flex-direction: column;
+// export const TestCase = styled.div`
+//   background-color: #323232;
+//   padding: 15px; /* Increased padding for better spacing */
+//   border-radius: 10px;
+//   margin-bottom: 15px; /* Increased margin-bottom for better separation */
+//   display: flex;
+//   flex-direction: column;
+// `;
+
+
+// export const CaseNavigation = styled.div`
+//   display: flex;
+//   gap: 10px;
+//   justify-content: flex-start; /* Align buttons to the start */
+//   align-items: flex-start; /* Align items to the start */
+// `;
+
+// export const CaseButton = styled.button`
+//   flex: 1;
+//   padding: 5px;
+//   background: ${(props) => (props.active ? '#198754' : '#171717')}; /* Updated to the specified green color */
+//   color: ${(props) => (props.active ? '#fff' : '#fff')};
+//   cursor: pointer;
+//   &:hover {
+//     background: #198754; /* Updated to the specified green color */
+//     color: #fff;
+//   }
+//   &:disabled {
+//     background: #f8f9fa;
+//     color: #000;
+//     cursor: not-allowed;
+//   }
+// `;
+
+///new code
+export const TestSectionWrapper = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    overflow: hidden;
 `;
 
+export const TestContent = styled.div`
+    flex: 1;
+    padding: 16px;
+  
+    overflow-y: auto; /* Add a vertical scrollbar when content exceeds the max-height */
+
+`;
+
+ export const TestCasesSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+`;
+
+export const TestResultsSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    
+`;
 
 export const CaseNavigation = styled.div`
-  display: flex;
-  gap: 10px;
-  justify-content: flex-start; /* Align buttons to the start */
-  align-items: flex-start; /* Align items to the start */
+    display: flex;
+    gap: 8px;
+    
 `;
 
 export const CaseButton = styled.button`
-  flex: 1;
-  padding: 5px;
-  background: ${(props) => (props.active ? '#198754' : '#171717')}; /* Updated to the specified green color */
-  color: ${(props) => (props.active ? '#fff' : '#fff')};
-  cursor: pointer;
-  &:hover {
-    background: #198754; /* Updated to the specified green color */
+    padding: 4px 8px;
+    background: ${(props) => (props.active ? '#00e7aa' : '#262626')};
+    color: ${(props) => (props.active ? '#fff' : '#fff')};
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    &:hover {
+        background: ${(props) => (props.active ? '#00e7aa' : '#198754')};
+        color: #fff;
+    }
+`;
+
+export const TestCase = styled.div`
+    background-color: #1e1e1e;
     color: #fff;
-  }
-  &:disabled {
-    background: #f8f9fa;
-    color: #000;
-    cursor: not-allowed;
-  }
+    padding: 16px;
+    border-radius: 4px;
+    
+    h4 {
+        margin-top: 0;
+    }
+    p {
+        margin-bottom: 0;
+    }
 `;
