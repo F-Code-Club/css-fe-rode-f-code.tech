@@ -5,8 +5,8 @@ import { Stack } from 'react-bootstrap';
 import ButtonStyled from '../../../components/Button';
 import { toastError, toastSuccess } from '../../../components/Toast';
 import roomApi from '../../../utils/api/roomApi';
-import CreateBEQuestions from './components/CreateBEQuestions';
-import CreateFEQuestions from './components/CreateFEQuestions';
+import CreateBEQuestions from '../CreateQuestion/components/CreateBEQuestions.jsx';
+import CreateFEQuestions from '../CreateQuestion/components/CreateFEQuestions.jsx';
 import CreateRoomInfo from './components/CreateRoomInfo';
 import { initialRoomInfo, FEInitQuestion, BEInitQuestion } from './initialData';
 import * as St from './styles';
@@ -61,7 +61,7 @@ const CreateRoom = () => {
         <St.Wrapper>
             <St.Title>Create Room</St.Title>
             <CreateRoomInfo roomInfo={roomInfo} setRoomInfo={setRoomInfo} errs={errors} />
-            <CreateSelectQuestion questions={questions} chooseQuestion={chooseQuestion} setChooseQuestion={setChooseQuestion} setQuestions={setQuestions} errs={errors} />
+            <CreateSelectQuestion roomInfo={roomInfo} questions={questions} chooseQuestion={chooseQuestion} setChooseQuestion={setChooseQuestion} setQuestions={setQuestions} errs={errors} />
             {/*{roomInfo.type === 'FE' ? (*/}
             {/*    <CreateFEQuestions*/}
             {/*        questions={questions}*/}

@@ -5,7 +5,7 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import {Row} from "react-bootstrap";
 
-const CreateSelectQuestion = ({ questions, setQuestions, chooseQuestion, setChooseQuestion, errs }) => {
+const CreateSelectQuestion = ({roomInfo, questions, setQuestions, chooseQuestion, setChooseQuestion, errs }) => {
     let errorChooseQuestion, setErrorChooseQuestion = useState('');
 
     useEffect( () => {
@@ -44,7 +44,9 @@ const CreateSelectQuestion = ({ questions, setQuestions, chooseQuestion, setChoo
                     }}>
                         <option value="" disabled>Select Test</option>
                         {questions.map((item) => {
-                            return (<option value={item.id}>{item.name}</option>);
+                            if (roomInfo.type === item.type) {
+                                return (<option value={item.id}>{item.name}</option>);
+                            }
                         })}
                     </Form.Select>
                     {errs.map((err) => {
