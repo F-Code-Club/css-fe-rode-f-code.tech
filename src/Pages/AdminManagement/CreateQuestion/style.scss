@@ -1,0 +1,241 @@
+$border-primary-color: #05b712;
+$border-secondary-color: #173c19;
+$bgr-primary-color: black;
+$bgr-secondary: #1c1b1b;
+$bgr-third-color: #323131; //img 
+$bgr-button-color: #323030;
+$bgr-hover-color: #525050; 
+$bgr-fourth-color: #373737; //input and output 
+$bgr-fifth-color: #262525;
+$line-primary-color: #828282;
+$line-secondary-color: #284b2d;
+$text-color: white;
+
+.main{
+    background-color: $bgr-primary-color;
+    color: $text-color;
+    border-left: 1px solid $border-primary-color;
+
+    &-header{
+        margin-top: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        border-bottom: 1px solid $border-primary-color ;
+
+        &-dropdown{
+            display: flex; 
+            justify-content: end;
+            margin-right: 20px;
+        }
+    }
+
+    &-content-question{
+        margin: 20px;
+        margin-top: 40px;
+        background-color: $bgr-secondary;
+        border-radius: 5px;
+        border: 1px solid $border-secondary-color;
+        padding: 10px;
+    }
+
+    &-confirm{
+        margin: 20px;
+    }
+}
+
+#dropdown-basic{
+    background-color: #05b712;
+}
+
+.confirm{
+    &-cancel:hover, &-create:hover{
+        background-color: $border-primary-color;
+        border: none;
+    }
+}
+
+.question, #question{
+    &-title{
+        padding-bottom: 10px;
+        margin-top: -30px;
+        font-size: 18px;
+    }
+
+    &-type2{
+        font-size: 20px;
+    }
+
+    &-type3{
+        font-size: 17px;
+        font-weight: 500;
+    }
+
+    &-type4{
+        font-size: 14px;
+    }
+}
+
+#submit{
+    &-decrease-btn {
+            border: none;
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            background-color: $border-primary-color;
+            border:1px solid $border-primary-color;
+        }
+    
+    &-increase-btn {
+        border: none;
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+        background-color: $border-primary-color;
+        border: 1px solid $border-primary-color;
+    }
+
+    &-input{
+        border: none;
+        border-top: 1px solid $border-primary-color;
+        border-bottom: 1px solid $border-primary-color;
+    }
+}
+
+#img{
+    &-upload{
+        width: 400px;
+        height: 250px;
+        margin-top: 20px;
+        border: none;
+        border: 3px dashed $line-primary-color;
+        background-color: $bgr-third-color;
+        margin-bottom: 40px;
+
+        &:hover {
+            background-color: $bgr-hover-color;
+        }
+    }
+
+    &-icon{
+        width: 30px;
+        height: 30px;
+        margin-bottom: 10px;
+    }
+}
+
+.button-icon{
+    display: inline-block;
+    margin-right: 10px;
+    margin-top: -5px;
+}
+
+#template{
+    &-button{
+        background-color: $bgr-button-color;
+        border: none;
+        border: 3px dashed $line-secondary-color;
+        padding: 10px;
+        color: $text-color;
+
+        &:hover {
+            background-color: $bgr-hover-color;
+        }
+    }
+}
+
+#codeTemplate{
+    border: none;
+    border-radius: 4px;
+    padding: 10px;
+    width: 400px;
+}
+
+.testcase{
+    padding: 0; 
+
+    &-body{
+        width: 100%;
+    }
+
+    &-header{
+        margin: 0px;
+        padding: 0px;
+    }
+
+    &-delete{
+        padding: 0px;
+        margin: 0px;
+        margin: 10px;
+        margin-left: 12px;
+        
+        & button{
+            padding:5px 10px;
+            
+            &:hover{
+                background-color: rgb(255, 37, 37);
+                outline: none;
+                border: none;
+            }
+        }
+
+    }
+
+    &-visible{
+        color: $text-color;
+        margin: auto 0;
+        
+        & span{
+            padding: 10px;
+        }
+    }
+
+    &-inputs{
+        background-color: $bgr-fifth-color;
+        margin-left: 12px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    &-input{
+        background-color: $bgr-fourth-color;
+        margin: 15px 0px;
+        border-radius: 4px;
+        border: 2px solid $line-primary-color;
+        
+        &-title{
+            color: $text-color !important;
+            background-color: $bgr-fourth-color !important;
+            padding: 10px 0px !important;
+        }
+
+        & textarea{
+            background-color: $bgr-fourth-color;
+            width: 150px;
+            padding: 10px;
+            outline: none;
+            border: none;
+            height: 150px;
+        }
+
+        &:first-of-type{
+            margin-right: 10px;
+        }
+    }
+}
+
+.line{
+    height: 1px;
+    width: 100%;
+    background-color: $border-primary-color;
+    margin: 20px 0px;
+}
+
+.header-testcase button {
+    color: $text-color;
+}
+
+.orange-background{
+    background-color: orange;
+}
+
+.header-testcase button[aria-expanded="true"] {
+    background-color: $border-secondary-color;
+}
