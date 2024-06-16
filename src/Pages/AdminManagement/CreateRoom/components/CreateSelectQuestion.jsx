@@ -29,6 +29,10 @@ const CreateSelectQuestion = ({roomInfo, questions, setQuestions, chooseQuestion
         })();
     }, [])
 
+    useEffect(() => {
+        setChooseQuestion('');
+    }, [roomInfo.type])
+
     return (
         <>
             <Row className="mb-3">

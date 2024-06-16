@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { Stack } from 'react-bootstrap';
-
+import { useNavigate } from "react-router-dom";
 import ButtonStyled from '../../../components/Button';
 import { toastError, toastSuccess } from '../../../components/Toast';
 import roomApi from '../../../utils/api/roomApi';
@@ -20,9 +20,12 @@ const CreateRoom = () => {
     const [chooseQuestion, setChooseQuestion] = useState('');
     const [errors, setErrors] = useState([]);
 
+
     useEffect(() => {
         roomInfo.questionStackId = chooseQuestion;
+        setRoomInfo(roomInfo);
     }, [chooseQuestion]);
+
 
     // Submit
     const handleSubmit = async () => {
@@ -38,9 +41,9 @@ const CreateRoom = () => {
                     // setRoomInfo(initialRoomInfo);
                     // setQuestions(roomInfo.type === 'FE' ? FEInitQuestion : BEInitQuestion);
 
-                    // setTimeout(() => {
-                    //     window.location.reload();
-                    // }, 2000);
+                    setTimeout(() => {
+                        window.location.href = '/admin/room'
+                    }, 2000);
                 } else {
                     toastError(`${res.data.message}. Open tab Console for more details`);
                     setErrors(res.data.err);
