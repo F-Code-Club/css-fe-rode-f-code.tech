@@ -44,7 +44,7 @@ const useAuth = () => {
     useEffect(() => {
         // Get the JWT token from the cookie
         const token = Localstorage.getToken();
-        const crea = Localstorage.getCredentialUser();
+        //const crea = Localstorage.getCredentialUser();
         // If there is no token, return
         if (!token) {
             setUserRole(undefined);
@@ -53,7 +53,7 @@ const useAuth = () => {
 
         try {
             setIsLoading(true);
-            setCredential(crea);
+            //setCredential(crea);
             // authApi.getInfoFromGG(credential).then((response) => {
             //     if (response.data.status === 200) {
             //         // console.log(response.data.data);
@@ -61,8 +61,9 @@ const useAuth = () => {
             // });
             authApi.getUser().then((user) => {
                 const formatUser = {
-                    firstName: user?.data.fname,
-                    lastName: user?.data.lname,
+                    // firstName: user?.data.fname,
+                    // lastName: user?.data.lname,
+                    fullName: user?.data.fullName,
                     studentId: user?.data.studentId,
                     role: user?.data.role,
                     id: user?.data.id,
