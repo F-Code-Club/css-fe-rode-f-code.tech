@@ -1,62 +1,88 @@
 import React from 'react';
-import { People, HouseDoor, PlusCircle, Pencil, QuestionCircle, BoxArrowRight } from 'react-bootstrap-icons';
-import { NavLink } from 'react-router-dom';
-import { SidebarContainer, SidebarItem, SidebarLink, SidebarLogout, SidebarHeader, SidebarSection, SidebarSubItem } from './styled';
 
-const Sidebar = () => {
+import { AdminEndBar } from '../../ContentNav/AdminContentNav.styled';
+import ContentNav from '../../ContentNav/ContentNav';
+import {
+    Container,
+    General,
+    IconUser,
+    User,
+    IconHouse,
+    Pagination,
+    BoldText,
+    IconPerson,
+    IconFile,
+    IconChat,
+    IconLogOut,
+    ContestInfo,
+    IconBarChart,
+    AdminBtn,
+    LogOutBtn,
+} from './styled';
+
+const infoItems = [
+    {
+        icon: <IconPerson />,
+        Info: 'User Management',
+        Action: '/contestant',
+    },
+    {
+        icon: <i class="bi bi-door-open"></i>,
+        Info: 'Room Management',
+        Action: '/admin/room',
+    },
+    {
+        icon: <IconBarChart />,
+        Info: 'Leaderboard',
+        Action: '/admin/leaderboard',
+    },
+    {
+        icon: <IconChat />,
+        Info: 'Question',
+        Action: '/admin/question',
+    }
+];
+
+const endItems = [
+
+
+];
+//   {
+//         icon: <IconLogOut />,
+//         Info: 'Log out',
+//         Action: '/login',
+//     },
+function Sidebar() {
     return (
-        <SidebarContainer>
-            <SidebarHeader>
-                <h2>Nguyen Van A</h2>
-                <p>Administrator</p>
-            </SidebarHeader>
-            <SidebarSection>
-                <h3>Information</h3>
-                <SidebarItem>
-                    <SidebarLink to="/user-management">
-                        <People /> User management
-                    </SidebarLink>
-                </SidebarItem>
-                <SidebarItem>
-                    <SidebarLink to="/room-management">
-                        <HouseDoor /> Room management
-                    </SidebarLink>
-                    <ul>
-                        <SidebarSubItem>
-                            <SidebarLink to="/create-room">
-                                <PlusCircle /> Create room
-                            </SidebarLink>
-                        </SidebarSubItem>
-                        <SidebarSubItem>
-                            <SidebarLink to="/edit-room">
-                                <Pencil /> Edit room
-                            </SidebarLink>
-                        </SidebarSubItem>
-                    </ul>
-                </SidebarItem>
-                <SidebarItem>
-                    <SidebarLink to="/question">
-                        <QuestionCircle /> Question
-                    </SidebarLink>
-                    <ul>
-                        <SidebarSubItem>
-                            <SidebarLink to="/create-question">
-                                <PlusCircle /> Create question
-                            </SidebarLink>
-                        </SidebarSubItem>
-                        <SidebarSubItem>
-                            <SidebarLink to="/edit-question">
-                                <Pencil /> Edit question
-                            </SidebarLink>
-                        </SidebarSubItem>
-                    </ul>
-                </SidebarItem>
-            </SidebarSection>
-            <SidebarLogout>
-                <BoxArrowRight /> Logout
-            </SidebarLogout>
-        </SidebarContainer>
+        <>
+            <Container>
+                <User>
+                    <h2>Nguyen Van A</h2>
+                    <p>Administrator</p>
+                </User>
+                <Pagination>
+                    <ContestInfo>
+                        <AdminEndBar>
+                            <nav>
+                            <BoldText>Information</BoldText>
+                                {infoItems.map((el) => {
+                                    return (
+                                        <AdminBtn to={el.Action} key={el.Info}>
+                                            {el.icon}
+                                            {el.Info}
+                                        </AdminBtn>
+                                    );
+                                })}
+                                <LogOutBtn to={'/login'} onClick={() => localStorage.clear()}>
+                                    <IconLogOut /> Log out
+                                </LogOutBtn>
+                            </nav>
+                        </AdminEndBar>
+                    </ContestInfo>
+                </Pagination>
+            </Container>
+        </>
     );
-};
+}
 
 export default Sidebar;
