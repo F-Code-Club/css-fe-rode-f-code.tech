@@ -1,4 +1,4 @@
-import { post, get } from '../ApiCaller';
+import { post, get,getAd } from '../ApiCaller';
 import Localstorage from '../Localstorage';
 import authHeader from './HeaderAuthorization';
 
@@ -18,10 +18,10 @@ const authApi = {
             });
     },
     getUser: async () => {
-        const endpoint = `/auth/self`;
+        const endpoint = `/api/v2/auth/self`;
         // eslint-disable-next-line no-return-await
 
-        return await get(endpoint, {}, authHeader())
+        return await getAd(endpoint, {}, authHeader())
             .then((res) => {
                 return res;
             })

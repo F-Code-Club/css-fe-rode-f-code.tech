@@ -165,10 +165,11 @@ export const Timer = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
+    font-size: 20px;
     padding: 0.375rem 2.25rem 0.375rem 0.75rem;
     border: 2px solid #00e7aa;
     /* shadow */
-
+    
     filter: drop-shadow(0px 2px 15px #00c994);
     border-radius: 15px;
 `;

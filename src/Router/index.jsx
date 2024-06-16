@@ -124,8 +124,8 @@ const RouterComponent = () => {
                         },
                         {
                             exact: true,
-                            path: '/algorithm/1',
-                            //loader: GetInfoRoomByCode,
+                            path: '/algorithm/:id',
+                            loader: GetInfoRoomByCode,
                             element: <Algorithm />,
                         },
                     ],

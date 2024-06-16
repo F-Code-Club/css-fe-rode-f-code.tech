@@ -364,16 +364,36 @@ export const RightSection1 = styled.div`
 export const DescriptionWrapper = styled.div`
   padding: 20px;
   background-color: #262626;
-  
   height: 100%;
   overflow-y: auto;
+  font-family: 'Quicksand';
 `;
 
 export const DescriptionHeader = styled.div`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  box-shadow: 0 0 5px 2px #1a1a1a;
+    padding: 10px;
+
+  > div:first-child {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  > div:last-child {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+`;
+export const DescriptionContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
 `;
 
 export const QuestionSelect = styled.select`
@@ -383,53 +403,40 @@ export const QuestionSelect = styled.select`
   color: #fff;
   background-color: #262626;
 `;
+export const UserInfo = styled.div`
+  margin-right: 20px;
+  color: #fff;
+  font-size: 24px; /* Increase font size */
+  font-weight: bold; /* Make it bold */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Add text shadow */
+`;
+export const HeaderWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+`
 
+export const UserScore = styled.div`
+  margin-right: 20px;
+  color: #fff;
+  font-size: 24px; /* Increase font size */
+  font-weight: bold; /* Make it bold */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Add text shadow */
+`;
 export const DescriptionTitle = styled.h1`
   font-size: 1.5em;
   margin-bottom: 10px;
   color: #fff;
 `;
 
-export const DescriptionText = styled.p`
-  font-size: 1.2em;
-  margin-bottom: 20px;
-  color: #fff;
-`;
 
-export const ExamplesTitle = styled.h3`
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  color: #fff;
-`;
 
-export const ExampleItem = styled.div`
-  background-color: #262626;
-  padding: 10px;
-  border: 1px solid #00e7aa;
-  border-radius: 5px;
-  margin-bottom: 10px;
-  
-  p {
-    margin: 0;
-    font-size: 1em;
-    color: #fff;
-  }
-`;
-
-export const ConstraintsTitle = styled.h3`
-  font-size: 1.2em;
-  margin-bottom: 10px;
-  color: #fff;
-`;
-
-export const ConstraintsList = styled.ul`
-  padding-left: 20px;
-  font-size: 1.2em;
-  color: #fff;
-  
-  li {
-    margin-bottom: 5px;
-  }
+export const PlaceholderImage = styled.img`
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: contain;
 `;
 
 export const ButtonWrapper = styled.div`
@@ -449,6 +456,7 @@ export const EditorAndTestWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
+  gap: 10px;
 `;
 
 export const BoxEditor = styled.div`
@@ -491,42 +499,6 @@ export const TabContent = styled.div`
   color: #fff;
 `;
 
-
-// export const TestCase = styled.div`
-//   background-color: #323232;
-//   padding: 15px; /* Increased padding for better spacing */
-//   border-radius: 10px;
-//   margin-bottom: 15px; /* Increased margin-bottom for better separation */
-//   display: flex;
-//   flex-direction: column;
-// `;
-
-
-// export const CaseNavigation = styled.div`
-//   display: flex;
-//   gap: 10px;
-//   justify-content: flex-start; /* Align buttons to the start */
-//   align-items: flex-start; /* Align items to the start */
-// `;
-
-// export const CaseButton = styled.button`
-//   flex: 1;
-//   padding: 5px;
-//   background: ${(props) => (props.active ? '#198754' : '#171717')}; /* Updated to the specified green color */
-//   color: ${(props) => (props.active ? '#fff' : '#fff')};
-//   cursor: pointer;
-//   &:hover {
-//     background: #198754; /* Updated to the specified green color */
-//     color: #fff;
-//   }
-//   &:disabled {
-//     background: #f8f9fa;
-//     color: #000;
-//     cursor: not-allowed;
-//   }
-// `;
-
-///new code
 export const TestSectionWrapper = styled.div`
     flex: 1;
     display: flex;
@@ -539,7 +511,7 @@ export const TestSectionWrapper = styled.div`
 export const TestContent = styled.div`
     flex: 1;
     padding: 16px;
-  
+    color: #fff;
     overflow-y: auto; /* Add a vertical scrollbar when content exceeds the max-height */
 
 `;
@@ -554,7 +526,7 @@ export const TestResultsSection = styled.div`
     display: flex;
     flex-direction: column;
     gap: 16px;
-    
+    color: #fff;
 `;
 
 export const CaseNavigation = styled.div`
@@ -565,10 +537,10 @@ export const CaseNavigation = styled.div`
 
 export const CaseButton = styled.button`
     padding: 4px 8px;
-    background: ${(props) => (props.active ? '#00e7aa' : '#262626')};
+    background: ${(props) => (props.active ? '#1a1a1a' : '#262626')};
     color: ${(props) => (props.active ? '#fff' : '#fff')};
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease, color 0.3s ease;
     &:hover {

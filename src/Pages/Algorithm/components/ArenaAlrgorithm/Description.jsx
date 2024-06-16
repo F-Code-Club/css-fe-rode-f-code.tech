@@ -1,71 +1,83 @@
-import { 
-  DescriptionWrapper, 
-  DescriptionHeader, 
-  QuestionSelect, 
-  DescriptionTitle, 
-  DescriptionText, 
-  ExamplesTitle, 
-  ExampleItem, 
-  ConstraintsTitle, 
-  ConstraintsList 
-} from "../../styled";
-import { Timer, Title } from "../LeaderBoard/styled";
-import CountdownTimer from "../../../CssBattle/components/CountDown";
-import { fetchQuestionStack } from "../../../../utils/api/questionStackAPI";
-import { useEffect, useState } from "react";
-const Description = ({ questionData, questions, setCurrentQuestion }) => {
-  const [activeQuestionStacks, setActiveQuestionStacks] = useState([]);
+import { useState, useEffect } from 'react';
+import { fetchAQuestion } from '../../../../utils/api/questionStackAPI';
+import CountdownTimer from '../../../CssBattle/components/CountDown';
+import {
+    DescriptionWrapper,
+    DescriptionHeader,
+    QuestionSelect,
+    DescriptionTitle,
+    PlaceholderImage,
+    UserInfo,
+    UserScore,
+    HeaderWrapper,
+} from '../../styled';
+import { Timer, Title } from '../LeaderBoard/styled';
+import { API_URL } from '../../../../config';
+const Description = ({ questions, setCurrentQuestion, timeRemaining, userInfo }) => {
+    const [questionData, setQuestionData] = useState({});
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const stackId = "66a5cb23-8910-4538-82ff-7c57e5c67e5f"; // Replace with the actual stack ID you want to fetch
-      const data = await fetchQuestionStack(stackId);
-      if (data) {
-        console.log("data", data);
-        setActiveQuestionStacks(data);
-      } else {
-        console.log("no data found");
-      }
+    useEffect(() => {
+        // Fetch the initial question data if questions array is not empty
+        if (questions.length > 0) {
+            handleQuestionChange(questions[0]);
+            console.log("questions got passed from props:",questions);
+        }
+    }, [questions]);
+
+    const handleQuestionChange = async (questionId) => {
+        console.log('Selected Question ID:', questionId); // Log the selected question ID
+        try {
+            const data = await fetchAQuestion(questionId);
+            setQuestionData(data);
+            setCurrentQuestionIndex(questions.indexOf(questionId));
+        } catch (error) {
+            console.error('Error fetching question:', error);
+        }
     };
 
-    fetchData();
-  }, []);
-    
-
-  return (
-    <DescriptionWrapper>
-      <DescriptionHeader>
-        <QuestionSelect
-          value={questionData.id}
-          onChange={(e) => setCurrentQuestion(questions.findIndex(q => q.id === parseInt(e.target.value)))}
-        >
-          {questions.map((q, index) => (
-            <option key={q.id} value={q.id}>Question {index + 1}</option>
-          ))}
-        </QuestionSelect>
-        <Timer>
-          <Title>Time:</Title>
-          <CountdownTimer targetDate={120} />
-        </Timer>
-      </DescriptionHeader>
-      <DescriptionTitle>{questionData.title}</DescriptionTitle>
-      <DescriptionText>{questionData.description}</DescriptionText>
-      <ExamplesTitle>Examples:</ExamplesTitle>
-      {questionData.examples.map((example, index) => (
-        <ExampleItem key={index}>
-          <p>Input: {example.input}</p>
-          <p>Output: {example.output}</p>
-          <p>Explanation: {example.explanation}</p>
-        </ExampleItem>
-      ))}
-      <ConstraintsTitle>Constraints:</ConstraintsTitle>
-      <ConstraintsList>
-        {questionData.constraints.map((constraint, index) => (
-          <li key={index}>{constraint}</li>
-        ))}
-      </ConstraintsList>
-    </DescriptionWrapper>
-  );
+    return (
+        <DescriptionWrapper>
+            <DescriptionHeader>
+                <HeaderWrapper>
+                    <UserInfo>{userInfo.fullName}</UserInfo>
+                    <UserScore>
+                        <strong>Score:</strong> {questionData.score ? questionData.score : 0}
+                    </UserScore>
+                </HeaderWrapper>
+                <HeaderWrapper>
+                    <QuestionSelect
+                        value={currentQuestionIndex !== null ? questions[currentQuestionIndex] : ''}
+                        onChange={(e) => handleQuestionChange(e.target.value)}
+                        disabled={questions.length === 0}
+                    >
+                        {questions.length > 0 ? (
+                            questions.map((q, index) => (
+                                <option key={q} value={q}>
+                                    Question {index + 1}
+                                </option>
+                            ))
+                        ) : (
+                            <option value="">No questions available</option>
+                        )}
+                    </QuestionSelect>
+                    <Timer>
+                        <Title>Time:</Title>
+                        <CountdownTimer targetDate={timeRemaining} />
+                    </Timer>
+                </HeaderWrapper>
+            </DescriptionHeader>
+            <DescriptionTitle>{questionData.title}</DescriptionTitle>
+            <PlaceholderImage
+                src={
+                    questionData.local_path
+                        ? `${API_URL}/${questionData.local_path}`
+                        : 'https://via.placeholder.com/600x400'
+                }
+                alt={`${questionData.local_path}`}
+            />
+        </DescriptionWrapper>
+    );
 };
 
 export default Description;

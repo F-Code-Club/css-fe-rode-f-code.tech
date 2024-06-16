@@ -28,6 +28,7 @@ import CodeMirror from '@uiw/react-codemirror';
 const CodeAndTestSection = ({ questionData, onSubmit }) => {
     
     const [code, setCode] = useState(questionData.codeTemplate);
+    const [codeTemplate, setCodeTemplate] = useState('');
     const [selectedLanguage, setSelectedLanguage] = useState('java');
     const [currentCase, setCurrentCase] = useState(0);
     const [submitStatus, setSubmitStatus] = useState(true);
@@ -42,6 +43,13 @@ const CodeAndTestSection = ({ questionData, onSubmit }) => {
         if (storedLanguage) {
             setSelectedLanguage(storedLanguage);
         }
+         // Set the initial code template based on the selected language
+         const template =
+         selectedLanguage === 'cpp'
+             ? questionData.cppCodeTemplate
+             : questionData.javaCodeTemplate;
+     setCodeTemplate(template);
+     setCode(template);
     }, [questionData]);
 
     const handleChange = (value) => {
@@ -52,6 +60,13 @@ const CodeAndTestSection = ({ questionData, onSubmit }) => {
     const handleSelectChange = (eventKey) => {
         setSelectedLanguage(eventKey);
         localStorage.setItem('language', eventKey);
+
+        const template =
+        eventKey === 'cpp'
+            ? questionData.cppCodeTemplate
+            : questionData.javaCodeTemplate;
+    setCodeTemplate(template);
+    setCode(template);
     };
 
     const getLanguageExtension = () => {
@@ -147,12 +162,14 @@ const CodeAndTestSection = ({ questionData, onSubmit }) => {
                                     </CaseButton>
                                 ))}
                             </CaseNavigation>
+                            <h4>Input</h4>
                             <TestCase>
-                                <h4>Input</h4>
+                                
                                 <p>{testResults[currentCase].input}</p>
                             </TestCase>
+                            <h4>Output</h4>
                             <TestCase>
-                                <h4>Output</h4>
+                                
                                 <p>{testResults[currentCase].output}</p>
                             </TestCase>
                         </TestCasesSection>
@@ -174,12 +191,12 @@ const CodeAndTestSection = ({ questionData, onSubmit }) => {
                                     </CaseButton>
                                 ))}
                             </CaseNavigation>
+                            <h4>Input</h4>
                             <TestCase>
-                                <h4>Input</h4>
                                 <p>{testResults[currentCase].input}</p>
                             </TestCase>
-                            <TestCase>
-                                <h4>Output</h4>
+                            <h4>Output</h4>
+                            <TestCase> 
                                 <p>{testResults[currentCase].output}</p>
                             </TestCase>
                         </TestResultsSection>
