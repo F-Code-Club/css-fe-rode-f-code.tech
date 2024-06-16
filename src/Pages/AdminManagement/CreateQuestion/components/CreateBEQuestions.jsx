@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import ButtonStyled from '../../../../components/Button';
-import * as St from '../styles';
-import CodeTemplate from './CodeTemplate';
-import MaxSumbitTimes from './MaxSumbitTimes';
-import Testcase from './Testcase';
-import UploadImage from './UploadImage';
-import { addBEQuestion, addTestcase } from './utils';
+import ButtonStyled from '../../../../components/Button/index.jsx';
+import * as St from '../../CreateRoom/styles.js';
+import CodeTemplate from '../../CreateRoom/components/CodeTemplate.jsx';
+import MaxSumbitTimes from '../../CreateRoom/components/MaxSumbitTimes.jsx';
+import Testcase from '../../CreateRoom/components/Testcase.jsx';
+import UploadImage from '../../CreateRoom/components/UploadImage.jsx';
+import { addBEQuestion, addTestcase } from '../../CreateRoom/components/utils.jsx';
 
 import Accordion from 'react-bootstrap/Accordion';
 

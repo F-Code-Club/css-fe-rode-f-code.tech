@@ -1,12 +1,12 @@
 import { useState } from 'react';
 
-import ButtonStyled from '../../../../components/Button';
-import * as St from '../styles';
-import AddColor from './AddColor';
-import CodeTemplate from './CodeTemplate';
-import MaxSumbitTimes from './MaxSumbitTimes';
-import UploadImage from './UploadImage';
-import { addFEQuestion } from './utils';
+import ButtonStyled from '../../../../components/Button/index.jsx';
+import * as St from '../../CreateRoom/styles.js';
+import AddColor from '../../CreateRoom/components/AddColor.jsx';
+import CodeTemplate from '../../CreateRoom/components/CodeTemplate.jsx';
+import MaxSumbitTimes from '../../CreateRoom/components/MaxSumbitTimes.jsx';
+import UploadImage from '../../CreateRoom/components/UploadImage.jsx';
+import { addFEQuestion } from '../../CreateRoom/components/utils.jsx';
 
 const CreateBEQuestions = ({ questions, setQuestions, error }) => {
     const [imageUrls, setImageUrls] = useState([]);
