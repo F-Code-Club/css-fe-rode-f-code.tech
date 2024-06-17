@@ -47,14 +47,10 @@ const endItems = [
 
 
 ];
-//   {
-//         icon: <IconLogOut />,
-//         Info: 'Log out',
-//         Action: '/login',
-//     },
-function Sidebar() {
+
+const Sidebar = ({ isVisible }) => {
     return (
-        <>
+        isVisible && (
             <Container>
                 <User>
                     <h2>Nguyen Van A</h2>
@@ -64,15 +60,13 @@ function Sidebar() {
                     <ContestInfo>
                         <AdminEndBar>
                             <nav>
-                            <BoldText>Information</BoldText>
-                                {infoItems.map((el) => {
-                                    return (
-                                        <AdminBtn to={el.Action} key={el.Info}>
-                                            {el.icon}
-                                            {el.Info}
-                                        </AdminBtn>
-                                    );
-                                })}
+                                <BoldText>Information</BoldText>
+                                {infoItems.map((el) => (
+                                    <AdminBtn to={el.Action} key={el.Info}>
+                                        {el.icon}
+                                        {el.Info}
+                                    </AdminBtn>
+                                ))}
                                 <LogOutBtn to={'/login'} onClick={() => localStorage.clear()}>
                                     <IconLogOut /> Log out
                                 </LogOutBtn>
@@ -81,8 +75,8 @@ function Sidebar() {
                     </ContestInfo>
                 </Pagination>
             </Container>
-        </>
+        )
     );
-}
+};
 
 export default Sidebar;

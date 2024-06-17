@@ -1,13 +1,16 @@
 import React from 'react';
+import { FaBars } from 'react-icons/fa';
+import { HeaderContainer, MenuIcon, HeaderTitle, FaBarIcon } from './styled';
 
-import { Container, Title } from './styled';
-
-function HeaderComponent() {
+const HeaderComponent = ({ toggleSidebar }) => {
     return (
-        <Container>
-            <Title>RODE</Title>
-        </Container>
+        <HeaderContainer>
+            <MenuIcon onClick={toggleSidebar}>
+                <FaBarIcon />
+            </MenuIcon>
+            <HeaderTitle>User Management</HeaderTitle>
+        </HeaderContainer>
     );
-}
+};
 
 export default HeaderComponent;

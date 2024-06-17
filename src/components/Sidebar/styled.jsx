@@ -13,13 +13,20 @@ import styled from 'styled-components';
 
 export const Container = styled.aside`
     width: 20%;
-    min-height: 87vh;
+    min-height: 88vh;
 
     background: #1C1B1B;
     padding: 10px;
-    border: solid rgba(24, 66, 28, 0.5);
+    border-top: solid 1.5px rgba(5, 183, 18, 0.5);
+    border-right: solid 1.5px rgba(5, 183, 18, 0.4);
     border-radius: 4px 10px 0 0;
+    box-shadow: 0px 4px 8px rgba(5, 183, 18, 0.2), 
+                0px -4px 8px rgba(5, 183, 18, 0.2),
+                4px 0px 8px rgba(5, 183, 18, 0.2),
+                -4px 0px 8px rgba(5, 183, 18, 0.2);
     z-index: 1;
+    // transition: transform 0.3s ease-in-out;
+    // transform: ${({ isVisible }) => (isVisible ? 'translateX(0)' : 'translateX(-100%)')};
     a {
         color: #515151;
         text-decoration: none;
