@@ -44,6 +44,11 @@ $text-color: white;
     }
 }
 
+.inforBoard-box {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
 body{ 
     color: white;
 }

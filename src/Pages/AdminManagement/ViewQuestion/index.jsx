@@ -125,6 +125,7 @@ const ViewQuestion = () => {
                                 <IoArrowDownOutline className='icon' /> 
                             </Col>
                             <Col>Option</Col>
+                             <hr />
                         </Row>
                         {listStack.map(element => (
                             <Row clasName='inforBoard-box--column'>
@@ -137,6 +138,7 @@ const ViewQuestion = () => {
                                     <button onClick={handleEdit}>Edit</button>
                                     <button onClick={handleDelete}>Delete</button>
                                 </Col>
+                                <hr />
                             </Row>))}
                     </div>)
                     : (<div>
