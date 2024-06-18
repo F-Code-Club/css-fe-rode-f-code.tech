@@ -1,4 +1,4 @@
-import {Col, Row } from 'react-bootstrap';
+import {Button, Col, Modal, Row } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import questionApi from '../../../utils/api/questionApi';
 import { useNavigate } from 'react-router-dom';
@@ -6,15 +6,22 @@ import { IoSearchSharp } from "react-icons/io5";
 import { FiPlus } from "react-icons/fi";
 import { IoArrowDownOutline } from "react-icons/io5";
 import './style.scss';
+import { toastError, toastSuccess } from '../../../components/Toast';
 
 const QuestionManagement = () => {
     const [status, setStatus] = useState('ACTIVE');
     const [stackName, setStackName] = useState('');
     const [listStack, setListStack] = useState([]);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [idToDelete, setIdToDelete] = useState(null);
+    const [stackToDeleteName, setStackToDeleteName] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchStackByStatus = async () => {
+        fetchStackByStatus();
+    }, [status]);
+
+    const fetchStackByStatus = async () => {
             try {
                 const params = { status: status };
                 const res = await questionApi.getStackByStatus(params);
@@ -28,11 +35,8 @@ const QuestionManagement = () => {
                 console.log("Error" + err);
                 setListStack([]);
             }
-        };
-        fetchStackByStatus();
-        return () => {};
-    }, [status]);
-
+    };
+    
     const handleSelect = async(event) => {
         const selectedStatus = event.target.value;
         setStatus(selectedStatus);
@@ -40,7 +44,7 @@ const QuestionManagement = () => {
 
         if (selectedStatus !== '') {
             const status2 = { status: selectedStatus };
-            return await questionApi.getStackByStatus(status2)
+            await questionApi.getStackByStatus(status2)
                 .then((res)=> {
                     if (res.length != 0){
                         const sortedData = res.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
@@ -59,7 +63,7 @@ const QuestionManagement = () => {
     const handleSearch = async() => {
         setListStack([]);
         if (stackName != '') {
-            return await questionApi.getStackByName(stackName)
+            await questionApi.getStackByName(stackName)
                 .then((res)=> {
                     if (res != null){
                         let arr = []
@@ -82,9 +86,43 @@ const QuestionManagement = () => {
         navigate('/admin/question/create');
     };
 
-    const handleView = () => {}
-    const handleEdit = () => {}
-    const handleDelete = () => {}
+    const handleView = (id) => {
+        navigate(`/admin/question/${id}`);
+    }
+    const handleEdit = (id) => {
+        navigate(`/admin/question/edit/${id}`);
+    }
+
+    const handleDelete = (id, name) => {
+        setIdToDelete(id);
+        setStackToDeleteName(name); 
+        setShowConfirmModal(true);
+    };
+
+    const handleConfirmDelete = async() => {
+        if(idToDelete != null){
+            await questionApi.deleteStack(idToDelete)
+            .then((res)=> {
+                if(res.status == 200){
+                    toastSuccess('Delete success');
+                }else if(res.status == 400){
+                    toastError('Delete fail');
+                }
+            }).catch((err)=>{
+                console.log("Error" + err);
+            })
+        }
+        setShowConfirmModal(false);
+        setIdToDelete(null);
+        setStackToDeleteName(''); 
+        fetchStackByStatus();
+    };
+
+    const handleCancelDelete = () => {
+        setShowConfirmModal(false);
+        setIdToDelete(null);
+        setStackToDeleteName('');
+    };
 
     return (
         <div className="main container h-100 rounded shadow mb-4">
@@ -134,12 +172,28 @@ const QuestionManagement = () => {
                                 <Col>{element.status}</Col>
                                 <Col>{element.createdAt}</Col>
                                 <Col>
-                                    <button onClick={handleView}>View</button>
-                                    <button onClick={handleEdit}>Edit</button>
-                                    <button onClick={handleDelete}>Delete</button>
+                                    <button onClick={() => handleView(element.id)}>View</button>
+                                    <button onClick={() =>handleEdit(element.id)}>Edit</button>
+                                    <button onClick={() => handleDelete(element.id, element.name)}>Delete</button>
                                 </Col>
                                 <hr />
                             </Row>))}
+                            <Modal className='popUp' show={showConfirmModal} onHide={handleCancelDelete} centered>
+                                <Modal.Header closeButton>
+                                    <Modal.Title>Delete confirm</Modal.Title>
+                                </Modal.Header>
+                                <Modal.Body>
+                                    Stack name: <strong>{stackToDeleteName}</strong>
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="secondary" onClick={handleCancelDelete}>
+                                        No
+                                    </Button>
+                                    <Button variant="danger" onClick={handleConfirmDelete}>
+                                        Yes
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
                     </div>)
                     : (<div>
                         <p>Nothing</p>
@@ -149,4 +203,4 @@ const QuestionManagement = () => {
     )
 }
 
-export default ViewQuestion;
+export default QuestionManagement;

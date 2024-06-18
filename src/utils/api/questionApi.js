@@ -1,10 +1,9 @@
-import {post, get, postAd, getAd } from '../ApiCaller';
+import {post, get, postAd, getAd, removeAd } from '../ApiCaller';
 import authHeader from './HeaderAuthorization';
 import localFileApi from './localFileApi';
 
 const questionApi = {
 
-    //Stack: 
     createNewStack: async(data)=>{
         const endpoint = `/api/v2/question-stacks`; 
         const token = authHeader();
@@ -45,6 +44,28 @@ const questionApi = {
                 return err;
             })
     },
+
+    getStackById: async (id) => {
+        const endpoint = `/api/v2/question-stacks/${id}`; 
+        return await getAd(endpoint,{}, authHeader())
+            .then((res) => {
+                return res.data;
+            })
+            .catch((err)=> {
+                return err;
+            })
+    },
+
+    deleteStack: async(id) => {
+        const endpoint = `/api/v2/question-stacks/${id}`;
+        //const params = {id: id};
+        return await removeAd(endpoint,{},{}, authHeader())
+            .then((res)=> {
+                return(res);
+            }).catch((err) => {
+                return err;
+            })
+    }
 };
 
 export default questionApi;

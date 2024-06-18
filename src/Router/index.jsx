@@ -23,7 +23,9 @@ import UserLayoutComponent from '../components/UserLayout/UserLayout.component';
 import AdminRoute from './AdminRoute';
 import PublicRoute from './PublicRoute';
 import { loaderInfoGG, GetInfoRoomByCode, GetInfoUser } from './RouterLoader/Loader';
-import CreateQuestion from '../Pages/AdminManagement/CreateQuestion';
+import QuestionCreate from '../Pages/AdminManagement/QuestionCreate';
+import QuestionEdit from '../Pages/AdminManagement/QuestionEdit';
+import QuestionView from '../Pages/AdminManagement/QuestionView';
 import QuestionManagement from '../Pages/AdminManagement/QuestionManagement';
 const RouterComponent = () => {
     const { width } = useWindowDimensions();
@@ -75,13 +77,25 @@ const RouterComponent = () => {
                             exact: true,
                             path: '/admin/question/create',
                             loader: Loading,
-                            element: <CreateQuestion/>,
+                            element: <QuestionCreate/>,
                         },
                         {
                             exact: true,
                             path: '/admin/question',
                             loader: Loading,
                             element: <QuestionManagement/>,
+                        },
+                        {
+                            exact: true,
+                            path: '/admin/question/:id',
+                            loader: Loading,
+                            element: <QuestionView />,
+                        },
+                        {
+                            exact: true,
+                            path: '/admin/question/edit/:id',
+                            loader: Loading,
+                            element: <QuestionEdit />,
                         },
                         {
                             exact: true,
