@@ -1,0 +1,67 @@
+$border-primary-color: #05b712;
+$border-secondary-color: #173c19;
+$bgr-primary-color: black;
+$bgr-secondary: #1c1b1b;
+$bgr-third-color: #323131; //img 
+$bgr-button-color: #323030;
+$bgr-hover-color: #525050;
+$bgr-fourth-color: #373737; //input and output 
+$bgr-fifth-color: #262525;
+$line-primary-color: #828282;
+$line-secondary-color: #284b2d;
+$text-color: white;
+
+.main {
+    background-color: $bgr-primary-color;
+    color: $text-color;
+    border-left: 1px solid $border-primary-color;
+
+    &-title {
+        border: none;
+        outline: none;
+        background-color: $bgr-primary-color;
+        font-size: 30px;
+        color: $text-color;
+        font-weight: 600;
+    }
+
+    &-header {
+        margin-top: 20px;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        border-bottom: 1px solid $border-primary-color ;
+    }
+}
+
+.inforBoard{
+    max-width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &-box{
+        max-width: 1000px;
+        background-color: $bgr-button-color;
+    }
+}
+
+.inforBoard-box {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+body{ 
+    color: white;
+}
+
+button, input{
+    color: black;
+}
+
+.icon{
+    color: red;
+    background-color: #05b712;
+}
+
+select{
+    color: blue;
+}

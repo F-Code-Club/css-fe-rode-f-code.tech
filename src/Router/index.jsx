@@ -24,7 +24,7 @@ import AdminRoute from './AdminRoute';
 import PublicRoute from './PublicRoute';
 import { loaderInfoGG, GetInfoRoomByCode, GetInfoUser } from './RouterLoader/Loader';
 import CreateQuestion from '../Pages/AdminManagement/CreateQuestion';
-import ViewQuestion from '../Pages/AdminManagement/ViewQuestion';
+import QuestionManagement from '../Pages/AdminManagement/QuestionManagement';
 const RouterComponent = () => {
     const { width } = useWindowDimensions();
     if (width <= 900) {
@@ -81,7 +81,7 @@ const RouterComponent = () => {
                             exact: true,
                             path: '/admin/question',
                             loader: Loading,
-                            element: <ViewQuestion/>,
+                            element: <QuestionManagement/>,
                         },
                         {
                             exact: true,
