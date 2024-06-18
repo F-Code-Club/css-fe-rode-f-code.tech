@@ -82,9 +82,9 @@ const RoomInfo = ({
                 {LIST_INFO.map((item, id) => (
                     <InfoItem data={item} key={id} />
                 ))}
-                <ButtonStyled buttonType="borderNeon" onClick={handleShow}>
-                    Leaderboard
-                </ButtonStyled>
+                {/*<ButtonStyled buttonType="borderNeon" onClick={handleShow}>*/}
+                {/*    Leaderboard*/}
+                {/*</ButtonStyled>*/}
             </Box>
         </StyledWrap>
     );

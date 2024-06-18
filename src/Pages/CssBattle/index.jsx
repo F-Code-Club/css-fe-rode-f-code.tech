@@ -16,7 +16,6 @@ import Col from 'react-bootstrap/Col';
 
 const ArenaCSS = () => {
     const roomInfo = useLoaderData();
-
     const currCode = localStorage.getItem('code');
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const codeTemplate = roomInfo?.questions[currentQuestion]?.codeTemplate
