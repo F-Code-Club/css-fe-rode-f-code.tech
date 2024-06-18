@@ -1,72 +1,6 @@
 import { themes } from '../../../../themes';
 
 import Form from 'react-bootstrap/Form';
-
-// const ROOM_TYPES = await roomApi.getAllRoomType().then((res) => res.data.data);
-// const ROOM_TYPES = ['FE', 'BE'];
-
-// export const FORM_LIST_PUBLIC_ROOM = [
-//     {
-//         label: 'Room Code',
-//         name: 'code',
-//         type: Form.Control,
-//     },
-//     {
-//         label: 'Room Type',
-//         name: 'type',
-//         type: Form.Select,
-//         children: (
-//             <>
-//                 <option value="" disabled>
-//                     Select room type
-//                 </option>
-//                 {ROOM_TYPES.map((item) => (
-//                     <option value={item} key={item}>
-//                         {item}
-//                     </option>
-//                 ))}
-//             </>
-//         ),
-//     },
-//     {
-//         label: 'Open Time',
-//         name: 'openTime',
-//         type: Form.Control,
-//         inputType: 'datetime-local',
-//     },
-
-//     {
-//         label: 'Visibility',
-//         name: 'isPrivate',
-//         type: Form.Select,
-//         children: (
-//             <>
-//                 <option value="" disabled>
-//                     Select visibility
-//                 </option>
-//                 <option value="true">Private</option>
-//                 <option value="false">Public</option>
-//             </>
-//         ),
-//     },
-// ];
-
-// export const FORM_LIST_PRIVATE_ROOM = [
-//     ...FORM_LIST_PUBLIC_ROOM,
-//     {
-//         label: 'Close Time',
-//         name: 'closeTime',
-//         type: Form.Control,
-//         inputType: 'datetime-local',
-//     },
-//     {
-//         label: 'Duration',
-//         name: 'duration',
-//         type: Form.Control,
-//         inputType: 'number',
-//     },
-// ];
-
 // FE: Front-end
 export const addFEQuestion = (setQuestions) => {
     setQuestions((prev) => [
@@ -99,13 +33,13 @@ export const addColor = (questionIdx, setQuestions) => {
     });
 };
 
-export const addCodeTemplate = (value, questionIdx, setQuestions) => {
-    setQuestions((prev) => {
-        let copy = [...prev];
-        copy[questionIdx].codeTemplate = value;
-        return copy;
-    });
-};
+// export const addCodeTemplate = (value, questionIdx, setQuestions) => {
+//     setQuestions((prev) => {
+//         let copy = [...prev];
+//         copy[questionIdx].codeTemplate = value;
+//         return copy;
+//     });
+// };
 
 // BE: Backend
 export const addBEQuestion = (setQuestions) => {

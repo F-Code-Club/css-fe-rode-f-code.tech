@@ -3,7 +3,6 @@ import { useState } from 'react';
 import ButtonStyled from '../../../../components/Button';
 import * as St from '../styles';
 import AddColor from './AddColor';
-import CodeTemplate from './CodeTemplate';
 import MaxSumbitTimes from './MaxSumbitTimes';
 import UploadImage from './UploadImage';
 import { addFEQuestion } from './utils';
@@ -44,6 +43,19 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                     )?.message
                                 }
                             />
+                        </div>
+
+                        <div className="col-md-6">
+                            {/* <CodeTemplate
+                                questionIdx={questionIdx}
+                                setQuestions={setQuestions}
+                                error={
+                                    error &&
+                                    error[questionIdx]?.chidren?.find(
+                                        (e) => e.at === 'codeTemplate'
+                                    )?.message
+                                }
+                            /> */}
                             <AddColor
                                 questionIdx={questionIdx}
                                 setQuestions={setQuestions}
@@ -52,19 +64,6 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                     error &&
                                     error[questionIdx]?.chidren?.find((e) => e.at === 'colors')
                                         ?.message
-                                }
-                            />
-                        </div>
-
-                        <div className="col-md-6">
-                            <CodeTemplate
-                                questionIdx={questionIdx}
-                                setQuestions={setQuestions}
-                                error={
-                                    error &&
-                                    error[questionIdx]?.chidren?.find(
-                                        (e) => e.at === 'codeTemplate'
-                                    )?.message
                                 }
                             />
                         </div>

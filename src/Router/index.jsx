@@ -23,7 +23,8 @@ import UserLayoutComponent from '../components/UserLayout/UserLayout.component';
 import AdminRoute from './AdminRoute';
 import PublicRoute from './PublicRoute';
 import { loaderInfoGG, GetInfoRoomByCode, GetInfoUser } from './RouterLoader/Loader';
-
+import CreateQuestion from '../Pages/AdminManagement/CreateQuestion';
+import ViewQuestion from '../Pages/AdminManagement/ViewQuestion';
 const RouterComponent = () => {
     const { width } = useWindowDimensions();
     if (width <= 900) {
@@ -70,6 +71,18 @@ const RouterComponent = () => {
                         //     loader: Loading,
                         //     element: <CreateRoom />,
                         // },
+                        {
+                            exact: true,
+                            path: '/admin/question/create',
+                            loader: Loading,
+                            element: <CreateQuestion/>,
+                        },
+                        {
+                            exact: true,
+                            path: '/admin/question',
+                            loader: Loading,
+                            element: <ViewQuestion/>,
+                        },
                         {
                             exact: true,
                             path: '/contestant',

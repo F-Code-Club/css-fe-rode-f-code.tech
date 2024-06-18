@@ -1,30 +1,34 @@
 import { useEffect, useState } from 'react';
 import { Col, Row } from 'react-bootstrap';
 import { Stack } from 'react-bootstrap';
-import ButtonStyled from '../../../components/Button';
+//import ButtonStyled from '../../../components/Button';
 import { FEInitQuestion, BEInitQuestion } from './initialData';
 import { toastError, toastSuccess } from '../../../components/Toast';
-// import roomApi from '../../../utils/api/roomApi';
+import questionApi from '../../../utils/api/questionApi';
 import CreateBEQuestions from './components/CreateBEQuestions';
 import CreateFEQuestions from './components/CreateFEQuestions';
 import Dropdown from 'react-bootstrap/Dropdown';
 import './style.scss';
 
 const CreateQuestion = () => { 
-    useEffect()
     const [roomInfo, setRoomInfo] = useState('BE');
     const [questions, setQuestions] = useState(BEInitQuestion);
     const [errors, setErrors] = useState([]);
+    const [stackName, setStackName] = useState("");
     
     const handleSubmit = async () => {
-            await authApi.login(credentials).then((res)=>{
-                if (res.status == 400) {
-                    navigate('/login', { state: res.data });
-                } else if (res.status === 200) {
-                    localStorage.setItem('token', res.data.token);
-                    navigate('/');
+            const stackMax = roomInfo === 'BE' ? 15 : 10;
+            const data = {
+                name: stackName, 
+                stackMax: stackMax,
+                type: roomInfo,
+            }
+            await questionApi.createNewStack(data).then((res)=> { 
+                if(res.data.status == 200){
+                    toastSuccess(res.data.message);
                 }
-            });
+            })
+            
     //     const payload = { ...roomInfo, questions };
     //     console.log('Payload: ', payload);
     //     await roomApi
@@ -56,13 +60,22 @@ const CreateQuestion = () => {
 
     const handleSelect = (eventKey) => {
         setRoomInfo(eventKey);
-        console.log(roomInfo);
     };
+
+    const handeStackName = (event) => {
+        setStackName(event.target.value);
+    }
 
     return (
         <div className="main container h-100 rounded shadow mb-4">
             <Row className='main-header'>
-                <Col><h2>Create TestCase</h2></Col>
+                <Col>
+                    <input 
+                        className='main-title' 
+                        placeholder='Input stack name...'
+                        onChange = {handeStackName}
+                        value={stackName}/>
+                </Col>
                 <Col>
                     <Dropdown onSelect={handleSelect} className='main-header-dropdown'>
                         <Dropdown.Toggle variant="success" id="dropdown-basic">

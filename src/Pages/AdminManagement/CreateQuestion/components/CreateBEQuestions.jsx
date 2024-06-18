@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import ButtonStyled from '../../../../components/Button';
 import * as St from '../styles';
-import CodeTemplate from './CodeTemplate';
 import MaxSumbitTimes from './MaxSumbitTimes';
 import Testcase from './Testcase';
 import UploadImage from './UploadImage';
@@ -49,7 +48,7 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                     }
                                 />
                             </div>
-                            <div className="row">
+                            {/* <div className="row">
                                 <CodeTemplate
                                     questionIdx={questionIdx}
                                     setQuestions={setQuestions}
@@ -61,7 +60,7 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                     }
                                     isBackend={true}
                                 />
-                            </div>
+                            </div> */}
                         </div>
 
                         <div className="col-md-6">

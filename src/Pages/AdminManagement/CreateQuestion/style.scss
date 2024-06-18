@@ -16,6 +16,14 @@ $text-color: white;
     color: $text-color;
     border-left: 1px solid $border-primary-color;
 
+    &-title{
+        border: none;
+        outline: none;
+        background-color: $bgr-primary-color;
+        font-size: 30px;
+        color: $text-color;
+        font-weight: 600;
+    }
     &-header{
         margin-top: 20px;
         padding-bottom: 20px;
