@@ -116,7 +116,7 @@ const ViewQuestion = () => {
             <Row className="inforBoard"> 
                     { (listStack.length > 0)
                     ? (<div className='inforBoard-box'>
-                        <Row className='inforBoard-box--column'>
+                        <Row>
                             <Col>Name</Col>
                             <Col>Type</Col>
                             <Col>Status</Col>
