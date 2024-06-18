@@ -11,25 +11,30 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import './style.scss';
 
 const CreateQuestion = () => { 
-    const [roomInfo, setRoomInfo] = useState('BE');
+    const [typeInfo, setTypeInfo] = useState('BE');
     const [questions, setQuestions] = useState(BEInitQuestion);
     const [errors, setErrors] = useState([]);
     const [stackName, setStackName] = useState("");
     
     const handleSubmit = async () => {
-            const stackMax = roomInfo === 'BE' ? 15 : 10;
+            const stackMax = typeInfo === 'BE' ? 15 : 10;
             const data = {
                 name: stackName, 
                 stackMax: stackMax,
-                type: roomInfo,
+                type: typeInfo,
             }
-            await questionApi.createNewStack(data).then((res)=> { 
+            await questionApi.createNewStack(data).then(async(res)=> { 
                 if(res.data.status == 200){
-                    toastSuccess(res.data.message);
+                    let stackId = ''; 
+                    await questionApi.getStackByName(stackName).then((res)=>{
+                        if(res != null){
+                            stackId = res.id;
+                        }
+                    })
                 }
             })
             
-    //     const payload = { ...roomInfo, questions };
+    //     const payload = { ...typeInfo, questions };
     //     console.log('Payload: ', payload);
     //     await roomApi
     //         .createOne(payload)   //sửa createOne từ room về question  
@@ -37,8 +42,8 @@ const CreateQuestion = () => {
     //             console.error('Response: ', res.data);
     //             if (res.data.status === 200) {
     //                 toastSuccess(res.data.message);
-    //                 // setRoomInfo(initialRoomInfo);
-    //                 // setQuestions(roomInfo.type === 'FE' ? FEInitQuestion : BEInitQuestion);
+    //                 // setTypeInfo(initialtypeInfo);
+    //                 // setQuestions(typeInfo.type === 'FE' ? FEInitQuestion : BEInitQuestion);
 
     //                 // setTimeout(() => {
     //                 //     window.location.reload();
@@ -55,11 +60,11 @@ const CreateQuestion = () => {
     };
 
     useEffect(() => {
-        setQuestions(roomInfo.type === 'FE' ? FEInitQuestion : BEInitQuestion);
-    }, [roomInfo]);
+        setQuestions(typeInfo.type === 'FE' ? FEInitQuestion : BEInitQuestion);
+    }, [typeInfo]);
 
     const handleSelect = (eventKey) => {
-        setRoomInfo(eventKey);
+        setTypeInfo(eventKey);
     };
 
     const handeStackName = (event) => {
@@ -79,7 +84,7 @@ const CreateQuestion = () => {
                 <Col>
                     <Dropdown onSelect={handleSelect} className='main-header-dropdown'>
                         <Dropdown.Toggle variant="success" id="dropdown-basic">
-                            Choose room : {roomInfo}
+                            Choose type : {typeInfo}
                         </Dropdown.Toggle>
                         <Dropdown.Menu>
                             <Dropdown.Item eventKey="BE">BE</Dropdown.Item>
@@ -89,7 +94,7 @@ const CreateQuestion = () => {
                 </Col>
             </Row>
             <Row className='main-content-question'>
-                {roomInfo === 'FE' 
+                {typeInfo === 'FE' 
                 ? (
                     <CreateFEQuestions
                         questions={questions}
@@ -107,7 +112,7 @@ const CreateQuestion = () => {
             <Stack direction="horizontal" gap={3} className="justify-content-end mb-4 main-confirm">
                 <button className='confirm-cancel'>Cancel</button>
                 <button className='confirm-create' onClick={handleSubmit}>
-                    Create
+                    Create Stack
                 </button>
             </Stack>
         </div>
