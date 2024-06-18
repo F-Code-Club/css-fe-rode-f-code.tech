@@ -60,6 +60,7 @@ const useAuth = () => {
             //     }
             // });
             authApi.getUser().then((user) => {
+                setUserRole(undefined);
                 const formatUser = {
                     // firstName: user?.data.fname,
                     // lastName: user?.data.lname,
