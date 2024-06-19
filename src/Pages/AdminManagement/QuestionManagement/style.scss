@@ -57,15 +57,189 @@ button, input{
     color: black;
 }
 
-.icon{
-    color: red;
-    background-color: #05b712;
-}
-
 select{
     color: blue;
 }
 
 .popUp{
     color: black;
+}
+
+.subplacement {
+    margin: 50px 50px 30px 50px;
+    display: flex;
+    align-items: center;
+}
+
+.subplacement col {
+    padding: 0px;
+}
+
+.searchArea {
+    position: relative;
+    display: flex;
+}
+
+.searchArea .icon {
+    color:rgb(118, 118, 118);
+    background-color: $bgr-fourth-color;
+    position:absolute;
+    left: 6%;
+    top: 50%;
+    transform: translateY(-50%);
+    padding-right: 5px;
+    height: 25px;
+    width: 25px;
+}
+
+.searchArea input {
+    padding-left: 40px;
+    border-width:0px;
+    border-radius: 5px;
+    height: 35px;
+    width: 250px;
+    font-weight: 600;
+    font-size: 15px;
+    background-color: $bgr-fourth-color;
+    color: white;
+    border: 1px solid #828282;
+    margin-right: 10px;
+}
+
+.searchArea input:focus{
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    color:white;
+    border: 1px solid #05b712;
+}
+
+.searchArea button, .optionBtn .view{
+   padding: 5px 16px;
+   background-color: #05b712;
+   font-weight: 600;
+   transition: .2s ease-in-out;
+   color: white;
+}
+
+.searchArea button:hover,.createBtn button:hover, .optionBtn .view:hover{
+    background-color:  transparent;
+    border: 1px solid #05b712;
+    color: #05b712;   
+}
+
+.optionBtn .edit,.optionBtn .delete, .optionBtn .view {
+    font-weight: 600;
+    padding: 4px 10px;
+    color: white;
+    transition: .2s ease-in-out;
+}
+
+.optionBtn .edit {
+    background-color: rgb(0, 106, 255);
+}
+
+.optionBtn .edit:hover {
+    background-color:  transparent;
+    border: 1px solid rgb(0, 106, 255);
+    color: rgb(0, 106, 255); 
+}
+
+.optionBtn .delete{
+    background-color: red;
+}
+
+.optionBtn .delete:hover {
+    background-color:  transparent;
+    border: 1px solid red;
+    color: red; 
+}
+
+
+.statusArea{
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.statusArea select {
+    color: rgb(118, 118, 118);
+    margin-left: 10px;
+    border-radius: 8px;
+    padding: 5px 0 5px 2px;
+}
+
+.statusArea select:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+.statusArea span {
+    font-weight: 600;
+}
+
+.createBtn {
+    display: flex;
+    justify-content: center;
+}
+
+.createBtn button {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap:6px;
+    background-color: #05b712;
+    font-weight: 600;
+    transition: .2s ease-in-out;
+    padding: 5px 16px;
+    color: white;
+}
+
+.createBtn .icon,.inforBoard .createCol .icon{
+    background-color: transparent;
+    color: white;
+}
+
+.createBtn button:hover .icon {
+    color: #05b712;
+}
+
+.inforBoard-box {
+    border-radius: 10px;
+    border:2px solid #284b2d;
+    padding: 0 35px;
+}
+
+.inforBoard-box hr {
+    margin: 10px 0 10px 0;
+}
+
+.inforBoard .colName div {
+    padding:10px 0 0 10px;
+    font-weight: 600;
+}
+
+.inforBoard .createCol {
+    display: flex;
+    align-items: center;
+    gap:8px;
+}
+
+.optionBtn {
+    display: flex;
+    gap:4px;
+
+}
+
+.tableContent div {
+    display: flex;
+    align-items: center;
+    width: 196px;
+}
+
+.nothingStatus {
+    font-size: 40px;
+    font-weight: 700;
+    position: relative;
+    top: 150px;
+    left: 450px;
 }

@@ -129,22 +129,22 @@ const QuestionManagement = () => {
             <Row className="header main-header">
                 <h1 className='main-title' >Stack Management</h1>
             </Row>
-            <Row className="subplacement">
-                <Col>
+            <Row className='subplacement'>
+                <Col className='searchArea'>
                     <IoSearchSharp className='icon'/>
                     <input placeholder='Search name...' value={stackName} type="text" onChange={handeStackName} />
                     <button onClick={handleSearch}>Search</button>
                 </Col>
-                <Col>
+                <Col className='statusArea'>
                     <span>Status: </span>
                     <select value={status} onChange={handleSelect} className='bg-black'>
-                        <option value="DRAFT">Draft</option>
+                        <option value="ACTIVE">Active</option>
                         <option value="DE_ACTIVE">De-Active</option>
-                        <option value="ACTIVE">Acive</option>
                         <option value="USED">Used</option>
+                        <option value="DRAFT">Draft</option>
                     </select>
                 </Col>
-                <Col>
+                <Col className='createBtn'>
                     <button onClick={handleCreateStack}>
                         <FiPlus className='icon'/>
                         Create Question
@@ -154,27 +154,27 @@ const QuestionManagement = () => {
             <Row className="inforBoard"> 
                     { (listStack.length > 0)
                     ? (<div className='inforBoard-box'>
-                        <Row>
+                        <Row className='colName'>
                             <Col>Name</Col>
                             <Col>Type</Col>
                             <Col>Status</Col>
-                            <Col>
+                            <Col className='createCol'>
                                 Create At 
                                 <IoArrowDownOutline className='icon' /> 
                             </Col>
-                            <Col>Option</Col>
-                             <hr />
+                            <Col className='optionCol'>Option</Col>
+                             <hr/>
                         </Row>
                         {listStack.map(element => (
-                            <Row clasName='inforBoard-box--column'>
+                            <Row className='inforBoard-box--column tableContent'>
                                 <Col>{element.name}</Col>
                                 <Col>{element.type}</Col>
                                 <Col>{element.status}</Col>
                                 <Col>{element.createdAt}</Col>
-                                <Col>
-                                    <button onClick={() => handleView(element.id)}>View</button>
-                                    <button onClick={() =>handleEdit(element.id)}>Edit</button>
-                                    <button onClick={() => handleDelete(element.id, element.name)}>Delete</button>
+                                <Col className='optionBtn'>
+                                    <button className='view' onClick={() => handleView(element.id)}>View</button>
+                                    <button className='edit' onClick={() =>handleEdit(element.id)}>Edit</button>
+                                    <button className='delete' onClick={() => handleDelete(element.id, element.name)}>Delete</button>
                                 </Col>
                                 <hr />
                             </Row>))}
@@ -196,7 +196,7 @@ const QuestionManagement = () => {
                             </Modal>
                     </div>)
                     : (<div>
-                        <p>Nothing</p>
+                        <p className='nothingStatus'>Nothing</p>
                     </div>)}
             </Row>
         </div>
