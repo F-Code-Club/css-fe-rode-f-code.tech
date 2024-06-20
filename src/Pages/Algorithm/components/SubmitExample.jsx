@@ -15,7 +15,7 @@ const SubmitEx = () => {
         let formData = {
             roomId: '5c94e661-cd42-4323-ae31-1da6add32b19',
             questionId: '4fab6032-5150-4d5f-a44f-5c4c11e3fda8',
-            code: '#include <stdio.h>\n\nint doub(int a) {\n    return a*2;\n}\n\nint main()\n{\n    int a;\n    scanf("%d", &a);\n    printf("%d", doub(a));\n    return 0;\n}',
+            code: '#include<stdio.h>\n\nint main () {\n    printf(\"Hello World\\n\");\n    return 0;\n}',
             language: 'C_CPP',
         };
         await submitApi.testScore(formData).then((res) => {

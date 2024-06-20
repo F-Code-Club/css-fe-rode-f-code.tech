@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useLoaderData } from 'react-router-dom';
 
 import authApi from '../../../../utils/api/authApi';
-import { fetchQuestionStack, fetchQuestions } from '../../../../utils/api/questionStackAPI';
+import { fetchAQuestion, fetchQuestions } from '../../../../utils/api/questionStackAPI';
 import { WrapperStyle } from '../../styled';
 // const ArenaAlgorithm = () => {
 //   // const roomInfo = useLoaderData(); // Comment out for now
@@ -114,40 +114,30 @@ public:
     ],
 };
 
+
 const ArenaAlgorithm = () => {
     const room = useLoaderData();
-    console.log('room is ', room);
-    //Get question stacks
-    const [activeQuestionStacks, setActiveQuestionStacks] = useState([]);
-    // room code
-    const roomCode = room.code;
-    //Timer set
+    const roomInfo = sampleRoomData; // sample data for testing
+    const questionData = roomInfo.questions[0];
+    
+    //console.log('room is ', room);
     const closeTimeDate = new Date(room.closeTime);
     const openTimeDate = new Date(room.openTime);
-    const timeDiffMinutes = Math.ceil(
-        (closeTimeDate.getTime() - openTimeDate.getTime()) / (1000 * 60)
-    );
-    console.log('timeDiff', timeDiffMinutes);
+    const timeDiffMinutes = Math.ceil((closeTimeDate - openTimeDate) / (1000 * 60));
+    //console.log('timeDiff', timeDiffMinutes);
+
     const [user, setUser] = useState('');
-    const roomInfo = sampleRoomData;
-    const [questions, setQuestions] = useState([]); // this is the questions id array
-    const [currentQuestion, setCurrentQuestion] = useState(questions[0]);
-    const questionData = roomInfo.questions[0];
+    const [currentQuestionId, setCurrentQuestionId] = useState('');
+    const [currentQuestionData, setCurrentQuestionData] = useState(null);
+    const [questions, setQuestions] = useState([]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const stackId = room.questionStack.id;
-                console.log('stackId', stackId);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        };
+        const stackId = room.questionStack.id;
+        console.log('stackId', stackId);
 
         const getUserInfo = async () => {
             try {
                 const user = await authApi.getUser();
-
                 setUser(user.data);
             } catch (error) {
                 console.error('Error fetching user info:', error);
@@ -158,10 +148,13 @@ const ArenaAlgorithm = () => {
             try {
                 const code = room.code;
                 const questions = await fetchQuestions(code);
-
                 setQuestions(questions);
-                setCurrentQuestion(questions[0]);
-                console.log('currentQuestion is ', currentQuestion);
+                console.log("questions array are ", questions);
+                if (questions.length > 0) {
+                    const initialQuestionData = await fetchAQuestion(questions[0]);
+                    setCurrentQuestionData(initialQuestionData);
+                    setCurrentQuestionId(questions[0]); // Set the initial question ID
+                }
             } catch (error) {
                 console.error('Error fetching questions:', error);
             }
@@ -169,10 +162,29 @@ const ArenaAlgorithm = () => {
 
         getQuestions();
         getUserInfo();
-        fetchData();
     }, [room]);
+
+    const handleQuestionChange = (questionId) => {
+        //console.log('Selected Question ID in index file:', questionId);
+        setCurrentQuestionId(questionId);
+    };
+
+    useEffect(() => {
+        const fetchAndUpdateQuestionData = async () => {
+            if (currentQuestionId) {
+                try {
+                    const data = await fetchAQuestion(currentQuestionId);
+                    setCurrentQuestionData(data);
+                } catch (error) {
+                    console.error('Error fetching question:', error);
+                }
+            }
+        };
+
+        fetchAndUpdateQuestionData();
+    }, [currentQuestionId]);
+
     const handleSubmit = (callback) => {
-        // Your submission logic here
         setTimeout(() => {
             console.log('Code submitted!');
             callback();
@@ -183,16 +195,21 @@ const ArenaAlgorithm = () => {
         <Board1>
             <LeftSection1>
                 <Description
-                    questionData={questionData}
                     questions={questions}
-                    setCurrentQuestion={setCurrentQuestion}
                     timeRemaining={timeDiffMinutes}
                     userInfo={user}
+                    onQuestionChange={handleQuestionChange}
                 />
             </LeftSection1>
             <RightSection1>
-                <CodeAndTestSection questionData={questionData} onSubmit={handleSubmit} />
-            </RightSection1>
+            {currentQuestionData && (
+                <CodeAndTestSection
+                    currentQuestionData={currentQuestionData}
+                    onSubmit={handleSubmit}
+                    currentQuestionId={currentQuestionId} // Pass the currentQuestionId here
+                />
+            )}
+        </RightSection1>
         </Board1>
     );
 };

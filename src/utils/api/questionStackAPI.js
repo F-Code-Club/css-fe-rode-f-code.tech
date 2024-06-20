@@ -54,14 +54,14 @@ export const fetchQuestions = async (roomCode) => {
 export const fetchAQuestion = async (questionId) => {
   try {
     // Validate UUID
-    console.log('Question ID:', questionId); // Log the question ID
+    //console.log('Question ID:', questionId); // Log the question ID
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     if (!uuidRegex.test(questionId)) {
       throw new Error(`Invalid UUID format: ${questionId}`);
     }
     const endpoint = `/question/get?question_id=${questionId}`;
     
-    console.log('Endpoint URL:', endpoint); // Log the full endpoint URL
+    //console.log('Endpoint URL:', endpoint); // Log the full endpoint URL
 
     const token = localStorage.getItem('token');
 
@@ -77,7 +77,7 @@ export const fetchAQuestion = async (questionId) => {
       throw new Error('Network response was not ok');
     }
 
-    console.log('Fetched Data:', response.data); // Log the fetched data
+    //console.log('Fetched question:', response.data); // Log the fetched data
     return response.data;
   } catch (error) {
     console.error('Error fetching question:', error);

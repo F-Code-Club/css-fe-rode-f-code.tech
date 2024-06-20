@@ -13,10 +13,10 @@ import {
 } from '../../styled';
 import { Timer, Title } from '../LeaderBoard/styled';
 import { API_URL } from '../../../../config';
-const Description = ({ questions, setCurrentQuestion, timeRemaining, userInfo }) => {
+const Description = ({ questions, timeRemaining, userInfo, onQuestionChange }) => {
     const [questionData, setQuestionData] = useState({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
-
+    //const [currentQuestionData, setCurrentQuestionData] = useState(null);
     useEffect(() => {
         // Fetch the initial question data if questions array is not empty
         if (questions.length > 0) {
@@ -24,13 +24,20 @@ const Description = ({ questions, setCurrentQuestion, timeRemaining, userInfo })
             console.log("questions got passed from props:",questions);
         }
     }, [questions]);
+    
+    // useEffect(() => {
+    //     setCurrentQuestionData(questionData);
+    // }, [questionData]);
 
     const handleQuestionChange = async (questionId) => {
         console.log('Selected Question ID:', questionId); // Log the selected question ID
         try {
             const data = await fetchAQuestion(questionId);
+            console.log("changed question data:",data);
             setQuestionData(data);
             setCurrentQuestionIndex(questions.indexOf(questionId));
+            onQuestionChange(questionId);
+           
         } catch (error) {
             console.error('Error fetching question:', error);
         }
@@ -70,11 +77,11 @@ const Description = ({ questions, setCurrentQuestion, timeRemaining, userInfo })
             <DescriptionTitle>{questionData.title}</DescriptionTitle>
             <PlaceholderImage
                 src={
-                    questionData.local_path
-                        ? `${API_URL}/${questionData.local_path}`
+                    questionData?.template?.url
+                        ? `${questionData.template.url}`
                         : 'https://via.placeholder.com/600x400'
                 }
-                alt={`${questionData.local_path}`}
+                alt={`${questionData?.template?.url}`}
             />
         </DescriptionWrapper>
     );

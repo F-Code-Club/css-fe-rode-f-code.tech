@@ -8,15 +8,13 @@ import Nav from 'react-bootstrap/Nav';
 import Tab from 'react-bootstrap/Tab';
 
 export const AlgorithmWrapper = styled(Container)`
-    /* padding: 6rem 3rem 0rem 3rem; */
-
-    height: 60%;
+    /* Allow the height to be determined by its content */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     .p-0 {
         padding: 0px;
-    }
-
-    .h-100 {
-        height: 70%;
     }
     .m-y-20 {
         margin: 20px 0;
@@ -28,6 +26,7 @@ export const AlgorithmWrapper = styled(Container)`
     .bg-blue {
         background-color: #020d26;
     }
+    overflow-y: auto;
 `;
 
 export const AlgorithmNav = styled(Nav)`
@@ -57,12 +56,12 @@ export const AlgorithmNav = styled(Nav)`
 
 export const AlgorithmContent = styled.div`
     background-color: transparent;
-    /* height: 90vh; */
     border-radius: 10px;
-    border: 1px solid #00e7aa;
-    /* padding: 0; */
-    /* margin-top: 100px; */
+    border: 1px solid #00e7aa; // color
     overflow: hidden;
+    /* Ensure it does not exceed the parent container's bounds */
+    width: 100%;
+    height: 100%;
 `;
 
 export const AlgorithmNavItem = styled(Nav.Link)`
@@ -342,7 +341,7 @@ export const WrapRightSection = styled.div`
 export const Board1 = styled.div`
   background-color: #262626;
   display: flex;
-  height: 100vh;
+  height: 100%;
   padding: 20px;
 `;
 
@@ -449,7 +448,7 @@ export const ButtonWrapper = styled.div`
 export const TestStatus = styled.div`
   color: ${(props) => (props.status === 'Accepted' ? '#00e7aa' : 'red')};
   font-weight: bold;
-  margin-top: 10px;
+
 `;
 
 export const EditorAndTestWrapper = styled.div`
@@ -461,14 +460,14 @@ export const EditorAndTestWrapper = styled.div`
 
 export const BoxEditor = styled.div`
   flex: 1;
-  height: ${(props) => (props.showResult ? '40vh' : 'calc(100vh - 250px)')};
-  max-height: ${(props) => (props.showResult ? '40vh' : 'calc(100vh - 250px)')};
-  overflow-y: auto;
+  height: ${(props) => (props.showResult ? 'calc(60vh)' : 'calc(100vh - 250px)')};
+  max-height: ${(props) => (props.showResult ? 'calc(60vh)' : 'calc(100vh - 250px)')};
 `;
+
 
 export const TabsWrapper = styled.div`
   display: flex;
-  margin-top: 10px;
+  
   background-color: #262626;
 `;
 
@@ -500,12 +499,12 @@ export const TabContent = styled.div`
 `;
 
 export const TestSectionWrapper = styled.div`
-    flex: 1;
     display: flex;
+    heigh: 50vh;
     flex-direction: column;
     border: 1px solid #dee2e6;
     border-radius: 4px;
-    overflow: hidden;
+
 `;
 
 export const TestContent = styled.div`
@@ -527,6 +526,24 @@ export const TestResultsSection = styled.div`
     flex-direction: column;
     gap: 16px;
     color: #fff;
+`;
+export const TestStatusHeader = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: bold;
+`;
+export const StatusBadge = styled.span`
+  color: ${props => props.status === 'Accepted' ? '#2cbb5d' : '#bf3c3e'};
+`;
+export const RuntimeInfo = styled.span`
+  color: #8c8c8c;
+  font-size: 14px;
+  font-weight: normal;
+`;
+export const InputOutput = styled.div`
+  margin-top: 16px;
 `;
 
 export const CaseNavigation = styled.div`
