@@ -100,7 +100,7 @@ const Login = () => {
                             <form onSubmit={handleSubmit}>
                                <div className={isValidInput.isValidemail ? "inputWithIcon" : "inputUnValid inputWithIcon"}>
                                   <FaRegUserCircle idName="iconUser" className={isValidInput.isValidemail ? 'inputIcon' : 'unValid'}/>
-                                  <input placeholder='Username' type="text" value={email} onChange={(event) => setEmail(event.target.value)} />
+                                  <input placeholder='Email' type="text" value={email} onChange={(event) => setEmail(event.target.value)} />
                                 </div>
                                 <br/>
 
