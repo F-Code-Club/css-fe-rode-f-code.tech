@@ -33,6 +33,7 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                     )?.message
                                 }
                             />
+                            <div>Score: </div>
                             <div className="row">
                                 <UploadImage
                                     question={question}

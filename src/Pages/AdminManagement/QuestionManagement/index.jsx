@@ -48,7 +48,6 @@ const QuestionManagement = () => {
                 .then((res)=> {
                     if (res.length != 0){
                         const sortedData = res.slice().sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-                        console.log(sortedData);
                         setListStack(sortedData);
                     }else { 
                         setListStack([]);
@@ -166,7 +165,7 @@ const QuestionManagement = () => {
                              <hr/>
                         </Row>
                         {listStack.map(element => (
-                            <Row className='inforBoard-box--column tableContent'>
+                            <Row key={element.id} className='inforBoard-box--column tableContent'>
                                 <Col>{element.name}</Col>
                                 <Col>{element.type}</Col>
                                 <Col>{element.status}</Col>

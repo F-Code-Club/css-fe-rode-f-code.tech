@@ -10,6 +10,9 @@ $bgr-fifth-color: #262525;
 $line-primary-color: #828282;
 $line-secondary-color: #284b2d;
 $text-color: white;
+$button-edit: orange;
+$button-view: rgb(0, 179, 255);
+$button-delete: rgb(255, 53, 53);
 
 .main {
     background-color: $bgr-primary-color;
@@ -50,7 +53,7 @@ $text-color: white;
 }
 
 body{ 
-    color: white;
+    color: $text-color;
 }
 
 button, input{
@@ -58,7 +61,7 @@ button, input{
 }
 
 select{
-    color: blue;
+    color: $bgr-primary-color;
 }
 
 .popUp{
@@ -78,6 +81,7 @@ select{
 .searchArea {
     position: relative;
     display: flex;
+    margin-left: 40px;
 }
 
 .searchArea .icon {
@@ -101,7 +105,7 @@ select{
     font-weight: 600;
     font-size: 15px;
     background-color: $bgr-fourth-color;
-    color: white;
+    color: $text-color;
     border: 1px solid #828282;
     margin-right: 10px;
 }
@@ -109,49 +113,63 @@ select{
 .searchArea input:focus{
     outline: 2px solid transparent;
     outline-offset: 2px;
-    color:white;
-    border: 1px solid #05b712;
+    color:$text-color;
+    border: 1px solid $border-primary-color;
 }
 
 .searchArea button, .optionBtn .view{
    padding: 5px 16px;
-   background-color: #05b712;
+   background-color: $border-primary-color;
    font-weight: 600;
    transition: .2s ease-in-out;
-   color: white;
+   color: $text-color;
 }
 
 .searchArea button:hover,.createBtn button:hover, .optionBtn .view:hover{
     background-color:  transparent;
-    border: 1px solid #05b712;
-    color: #05b712;   
+    border: 1px solid $border-primary-color;
+    color: $border-primary-color;   
 }
+
+.optionBtn .view:hover{
+    background-color: transparent;
+    border: 1px solid $button-view;
+    color: $button-view;
+}
+
 
 .optionBtn .edit,.optionBtn .delete, .optionBtn .view {
     font-weight: 600;
     padding: 4px 10px;
-    color: white;
+    color: $text-color;
     transition: .2s ease-in-out;
 }
 
-.optionBtn .edit {
-    background-color: rgb(0, 106, 255);
+.optionBtn .edit { 
+    background-color: transparent;
+    color: $button-edit;
+}
+
+.optionBtn .view {
+    background-color: transparent;
+    color: $button-view;
 }
 
 .optionBtn .edit:hover {
-    background-color:  transparent;
-    border: 1px solid rgb(0, 106, 255);
-    color: rgb(0, 106, 255); 
+    //background-color:  transparent;
+    border: 1px solid $button-edit;
+    color: $button-edit; 
 }
 
 .optionBtn .delete{
-    background-color: red;
+    background-color: transparent;
+    color: $button-delete;
 }
 
 .optionBtn .delete:hover {
     background-color:  transparent;
-    border: 1px solid red;
-    color: red; 
+    border: 1px solid $button-delete;
+    color: $button-delete; 
 }
 
 
@@ -187,26 +205,27 @@ select{
     align-items: center;
     flex-wrap: wrap;
     gap:6px;
-    background-color: #05b712;
+    background-color: $border-primary-color;
     font-weight: 600;
     transition: .2s ease-in-out;
     padding: 5px 16px;
-    color: white;
+    color: $text-color;
 }
 
 .createBtn .icon,.inforBoard .createCol .icon{
     background-color: transparent;
-    color: white;
+    color: $text-color;
 }
 
 .createBtn button:hover .icon {
-    color: #05b712;
+    color: $border-primary-color;
 }
 
 .inforBoard-box {
     border-radius: 10px;
     border:2px solid #284b2d;
     padding: 0 35px;
+    margin-bottom: 30px;
 }
 
 .inforBoard-box hr {

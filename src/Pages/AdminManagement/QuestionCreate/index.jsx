@@ -26,12 +26,12 @@ const QuestionCreate = () => {
             }
             await questionApi.createNewStack(data).then(async(res)=> { 
                 if(res.data.status == 200){
-                    let stackId = ''; 
-                    await questionApi.getStackByName(stackName).then((res)=>{
-                        if(res != null){
-                            stackId = res.id;
-                        }
-                    })
+                    // let stackId = ''; 
+                    // await questionApi.getStackByName(stackName).then((res)=>{
+                    //     if(res != null){
+                    //         stackId = res.id;
+                    //     }
+                    // })
                 }
             })
             
@@ -112,9 +112,7 @@ const QuestionCreate = () => {
             </Row>
             <Stack direction="horizontal" gap={3} className="justify-content-end mb-4 main-confirm">
                 <button className='confirm-cancel'>Cancel</button>
-                <button className='confirm-create' onClick={handleSubmit}>
-                    Create Stack
-                </button>
+                <button className='confirm-create' onClick={handleSubmit}>Create Stack</button>
             </Stack>
         </div>
     )
