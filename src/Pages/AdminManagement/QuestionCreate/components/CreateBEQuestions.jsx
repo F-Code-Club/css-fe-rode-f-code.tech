@@ -9,8 +9,9 @@ import { addBEQuestion, addTestcase } from './utils';
 import { FaPlus } from "react-icons/fa";
 
 import Accordion from 'react-bootstrap/Accordion';
+import Score from './Score';
 
-const CreateBEQuestions = ({ questions, setQuestions, error }) => {
+const CreateBEQuestions = ({type, questions, setQuestions, error }) => {
     const [imageUrls, setImageUrls] = useState([]);
     // console.log(error[0]?.chidren?.find((e) => e.at === 'maxSubmitTimes'));
 
@@ -19,7 +20,6 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
             {questions?.map((question, questionIdx) => (
                 <St.Questions key={questionIdx}>
                     <St.QuestionTitle className='question-title'>Question {questionIdx + 1}:</St.QuestionTitle>
-
                     <div className="row">
                         <div className="col-md-6">
                             <MaxSumbitTimes
@@ -33,14 +33,16 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                     )?.message
                                 }
                             />
-                            <div>Score: </div>
+                            <Score 
+                                questionIdx={questionIdx}
+                                setQuestions={setQuestions}
+                            />
                             <div className="row">
                                 <UploadImage
+                                    type = {type}
                                     question={question}
                                     questionIdx={questionIdx}
                                     setQuestions={setQuestions}
-                                    setImageUrls={setImageUrls}
-                                    imageUrls={imageUrls}
                                     error={
                                         error &&
                                         error[questionIdx]?.chidren?.find(
@@ -49,21 +51,7 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                     }
                                 />
                             </div>
-                            {/* <div className="row">
-                                <CodeTemplate
-                                    questionIdx={questionIdx}
-                                    setQuestions={setQuestions}
-                                    error={
-                                        error &&
-                                        error[questionIdx]?.chidren?.find(
-                                            (e) => e.at === 'codeTemplate'
-                                        )?.message
-                                    }
-                                    isBackend={true}
-                                />
-                            </div> */}
                         </div>
-
                         <div className="col-md-6">
                             <Accordion
                                 defaultActiveKey={question?.testCases?.length - 1 || 0}

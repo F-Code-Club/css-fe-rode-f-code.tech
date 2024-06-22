@@ -19,9 +19,9 @@ const QuestionView = () => {
         try {
             const res = await questionApi.getStackById(stackID);
             if (res.status === 200) {
-                setType(res.data.data.type);
-                setStackName(res.data.data.name);
-                return res.data.data.questions;
+                setType(res.data.type);
+                setStackName(res.data.name);
+                return res.data.questions;
             } else if (res.status === 400) {
                 setError('Fail to get question list');
                 return null;
@@ -59,6 +59,7 @@ const QuestionView = () => {
 
     const fetchQuestions = async () => {
         const listQuestions = await getAllQuestion(id);
+        console.log(listQuestions);
         if (listQuestions) {
             const questionData = await getQuestionInfor(listQuestions);
             setData(questionData);
@@ -67,7 +68,7 @@ const QuestionView = () => {
 
     useEffect(() => {
         fetchQuestions();
-    }, []);
+    }, [id]);
 
     const handleEdit = (id) => {
         navigate(`/admin/question/edit/${id}`);
@@ -89,7 +90,7 @@ const QuestionView = () => {
                 <Row className='main-content-question'>
                     {data && data.map((question, questionIndex) => (
                         <div key={questionIndex} className='container'>
-                            {type === 'FE' ? (
+                            {type === 'FE' && question != [] ? (
                                 <ViewFE question={question} questionIndex={questionIndex}/>
                             ) : (
                                 <ViewBE question={question} questionIndex={questionIndex}/>

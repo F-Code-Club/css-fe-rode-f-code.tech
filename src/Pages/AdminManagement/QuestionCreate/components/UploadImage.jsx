@@ -1,58 +1,62 @@
-import { useRef } from 'react';
-
+import { useRef, useState } from 'react';
 import { extractColors } from 'extract-colors';
-
-import localFilesAPI from '../../../../utils/api/localFilesAPI';
 import * as St from '../styles';
 import { MdImageSearch } from "react-icons/md";
 
-const UploadImage = ({ question, questionIdx, setQuestions, setImageUrls, imageUrls, error }) => {
+const UploadImage = ({ type, question, questionIdx, setQuestions, error }) => {
     const inputRef = useRef(null);
-
-    const uploadImage = async (files, questionIdx) => {
+    const [previewUrl, setPreviewUrl] = useState(null);
+    
+    const handleImageChange = (files) => {
         try {
             const file = files[0];
-            const res = await localFilesAPI.uploadQuestionFile(file);
             const reader = new FileReader();
 
-            reader.onload = (event) => {
+            reader.onload = async(event) => {
                 const imageUrl = event.target.result;
-
-                extractColors(imageUrl)
-                    .then((colors) => {
-                        setQuestions((prev) => {
-                            let copy = [...prev];
-                            copy[questionIdx].colors = colors.map((color) => color.hex).join();
-                            copy[questionIdx].questionImage = res.data.data[0].id;
-                            return copy;
+                try {
+                    if(type == 'FE'){
+                        const colors = await extractColors(imageUrl);
+                        setQuestions((prevQuestions) => {
+                            const updatedQuestions = [...prevQuestions];
+                            updatedQuestions[questionIdx].colors = colors.map((color) => color.hex).join(',');
+                            updatedQuestions[questionIdx].questionImage = file;
+                            return updatedQuestions;
                         });
-                    })
-                    .catch(console.error);
-                setImageUrls((prev) => {
-                    let copy = [...prev];
-                    copy[questionIdx] = imageUrl;
-                    return copy;
-                });
+                    }else if (type =='BE'){
+                        setQuestions((prevQuestions) => {
+                            const updatedQuestions = [...prevQuestions];
+                            updatedQuestions[questionIdx].questionImage = file;
+                            return updatedQuestions;
+                        });
+                    }
+                    setPreviewUrl(imageUrl);
+                } catch (error) {
+                    console.error('Error', error);
+                }
             };
-
             reader.readAsDataURL(file);
         } catch (error) {
             console.log('Error: ', error);
         }
     };
 
-    const removeImage = (questionIdx) => {
-        setQuestions((prev) => {
-            let copy = [...prev];
-            copy[questionIdx].colors = '';
-            copy[questionIdx].questionImage = '';
-            return copy;
-        });
-        setImageUrls((prev) => {
-            let copy = [...prev];
-            copy[questionIdx] = '';
-            return copy;
-        });
+    const removeImage = () => {
+        if (type == 'FE'){
+            setQuestions((prevQuestions) => {
+                const updatedQuestions = [...prevQuestions];
+                updatedQuestions[questionIdx].colors = '';
+                updatedQuestions[questionIdx].questionImage = ''; 
+                return updatedQuestions;
+            });
+        }else if (type == 'BE'){
+            setQuestions((prevQuestions) => {
+                const updatedQuestions = [...prevQuestions];
+                updatedQuestions[questionIdx].questionImage = ''; 
+                return updatedQuestions;
+            });
+        }
+        setPreviewUrl(null);
     };
 
     return (
@@ -63,14 +67,14 @@ const UploadImage = ({ question, questionIdx, setQuestions, setImageUrls, imageU
                 type="file"
                 hidden
                 ref={inputRef}
-                onChange={(e) => uploadImage(e.target.files, questionIdx)}
+                onChange={(e) => handleImageChange(e.target.files)}
             />
             {question.questionImage ? (
                 <div className="position-relative" style={{ width: '300px' }}>
-                    <St.PreviewImage src={imageUrls[questionIdx]} alt="Image" />
+                    <St.PreviewImage src={previewUrl} alt="Image" />
                     <button
                         className="position-absolute top-0 start-100 translate-middle rounded-circle bg-danger text-white py-2 px-3"
-                        onClick={() => removeImage(questionIdx)}
+                        onClick={removeImage}
                     >
                         x
                     </button>

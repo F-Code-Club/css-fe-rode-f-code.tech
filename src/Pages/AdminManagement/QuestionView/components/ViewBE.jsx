@@ -20,7 +20,7 @@ const ViewBE = ({ question, questionIndex }) => {
                     <div className="row">
                         <div>
                             <label>Image</label>
-                            {question.template.url ? (
+                            {question?.template?.url ? (
                                 <div className="position-relative" style={{ width: '300px'}}>
                                 <img
                                     style={{ width: '300px', height: '250px', objectFit: 'cover', marginBottom: '20px' }} 
@@ -35,7 +35,7 @@ const ViewBE = ({ question, questionIndex }) => {
                     </div>
                 </div>
                 <div className="col-md-6">
-                    {question.testCases.map((testcase, testcaseIdx) => (
+                    {question?.testCases.map((testcase, testcaseIdx) => (
                         <div key={testcaseIdx}>
                             <h3 className={`header-testcase ${testcase.isVisible ? 'check-background' : ''}`}>
                                 Testcase: {testcaseIdx + 1}

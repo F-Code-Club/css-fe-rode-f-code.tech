@@ -10,24 +10,24 @@ import {
 } from './utils';
 
 const Testcase = ({item, testcaseIdx, questionIdx, setQuestions, error }) => {
-    const [visible, setVisible] = useState(true);
+    const [isVisible, setIsVisible] = useState(true);
 
     const handleDelete = () => {
         deleteTestcase(questionIdx, testcaseIdx, setQuestions);
     };
 
     const handleCheckboxChange = () => {
-        setVisible(!visible);
+        setIsVisible(!isVisible);
         setQuestions((prev) => {
             const newQuestions = [...prev];
-            newQuestions[questionIdx].testCases[testcaseIdx].visible = !newQuestions[questionIdx].testCases[testcaseIdx].visible;
+            newQuestions[questionIdx].testCases[testcaseIdx].isVisible = !newQuestions[questionIdx].testCases[testcaseIdx].isVisible;
             return newQuestions;
         });
     };
 
     return (
         <Accordion.Item eventKey={testcaseIdx}>
-            <Accordion.Header className={`header-testcase  ${visible ? '' : 'orange-background'}`}>
+            <Accordion.Header className={`header-testcase  ${isVisible ? '' : 'orange-background'}`}>
                 Testcase {testcaseIdx + 1} 
             </Accordion.Header>
             <Accordion.Body className='testcase'>
@@ -39,7 +39,7 @@ const Testcase = ({item, testcaseIdx, questionIdx, setQuestions, error }) => {
                         <Col className='testcase-visible'>
                             <span>Is Visible</span>
                             <input type='checkbox'
-                                checked={item.visible}
+                                checked={item.isVisible}
                                 onChange={handleCheckboxChange}
                             ></input>
                         </Col>

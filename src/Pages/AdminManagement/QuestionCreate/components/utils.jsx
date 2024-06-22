@@ -7,9 +7,9 @@ export const addFEQuestion = (setQuestions) => {
         ...prev,
         {
             maxSubmitTimes: 0,
+            score: 0,
             questionImage: '',
             colors: themes.colors.primary,
-            codeTemplate: '',
         },
     ]);
 };
@@ -47,22 +47,23 @@ export const addBEQuestion = (setQuestions) => {
         ...prev,
         {
             maxSubmitTimes: 0,
+            score: 0,
             questionImage: '',
-            testCases: [{ input: '', output: '' , visible: false }],
+            testCases: [{ input: '', output: '' , isVisible: false }],
         },
     ]);
 };
 
 export const addTestcase = (questionIdx, setQuestions) => {
     setQuestions((prev) => {
-        const { testCases, ...rest } = prev[questionIdx]; // destructure testcases array and the rest of the question object
-        const newTestcases = [...testCases, { input: '', output: '', visible: false }]; // add a new testcase to the testcases array
-        const updatedQuestion = { ...rest, testCases: newTestcases }; // create a new object with updated testcases array
+        const { testCases, ...rest } = prev[questionIdx]; 
+        const newTestcases = [...testCases, { input: '', output: '', visible: false }]; 
+        const updatedQuestion = { ...rest, testCases: newTestcases }; 
         const updatedQuestions = [
             ...prev.slice(0, questionIdx),
             updatedQuestion,
             ...prev.slice(questionIdx + 1),
-        ]; // replace the old question object with the updated one
+        ];
         return updatedQuestions;
     });
 };

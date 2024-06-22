@@ -4,19 +4,22 @@ import ButtonStyled from '../../../../components/Button';
 import * as St from '../styles';
 import AddColor from './AddColor';
 import MaxSumbitTimes from './MaxSumbitTimes';
+import Score from './Score';
 import UploadImage from './UploadImage';
 import { addFEQuestion } from './utils';
 import { FaPlus } from "react-icons/fa";
+import { Col, Row } from 'react-bootstrap';
+import questionApi from '../../../../utils/api/questionApi';
 
-const CreateBEQuestions = ({ questions, setQuestions, error }) => {
+const CreateFEQuestions = ({type, questions, setQuestions, error, questionIds }) => {
     const [imageUrls, setImageUrls] = useState([]);
-
     return (
         <>
             {questions.map((question, questionIdx) => (
                 <St.Questions key={questionIdx}>
-                    <St.QuestionTitle className='question-title'>Question {questionIdx + 1}:</St.QuestionTitle>
-
+                    <St.QuestionTitle className='question-title'>
+                        Question: {questionIdx + 1}
+                    </St.QuestionTitle>
                     <div className="row">
                         <div className="col-md-6">
                             <MaxSumbitTimes
@@ -30,12 +33,15 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                     )?.message
                                 }
                             />
+                            <Score 
+                                questionIdx={questionIdx}
+                                setQuestions={setQuestions}
+                            />
                             <UploadImage
+                                type={type}
                                 question={question}
                                 questionIdx={questionIdx}
                                 setQuestions={setQuestions}
-                                setImageUrls={setImageUrls}
-                                imageUrls={imageUrls}
                                 error={
                                     error &&
                                     error[questionIdx]?.chidren?.find(
@@ -44,18 +50,7 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
                                 }
                             />
                         </div>
-
                         <div className="col-md-6">
-                            {/* <CodeTemplate
-                                questionIdx={questionIdx}
-                                setQuestions={setQuestions}
-                                error={
-                                    error &&
-                                    error[questionIdx]?.chidren?.find(
-                                        (e) => e.at === 'codeTemplate'
-                                    )?.message
-                                }
-                            /> */}
                             <AddColor
                                 questionIdx={questionIdx}
                                 setQuestions={setQuestions}
@@ -82,4 +77,4 @@ const CreateBEQuestions = ({ questions, setQuestions, error }) => {
     );
 };
 
-export default CreateBEQuestions;
+export default CreateFEQuestions;

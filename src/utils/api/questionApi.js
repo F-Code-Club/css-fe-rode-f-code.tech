@@ -7,15 +7,9 @@ const questionApi = {
     //STACK 
     createNewStack: async(data)=>{
         const endpoint = `/api/v2/question-stacks`; 
-        const token = authHeader();
-        const data2= JSON.stringify(data);
-        const headers =  {
-                'Content-Type': 'application/json',
-                ...token
-        };
-        return await postAd(endpoint, data2, {}, headers)
+        return await postAd(endpoint, data, {}, authHeader())
             .then((res) => {
-                return res;
+                return res.data;
             })
             .catch((err) => {
                 return err;
@@ -54,6 +48,7 @@ const questionApi = {
         const endpoint = `/api/v2/question-stacks/${id}`; 
         return await getAd(endpoint,{}, authHeader())
             .then((res) => {
+                console.log(res.data);
                 return res.data;
             })
             .catch((err)=> {
@@ -74,15 +69,9 @@ const questionApi = {
     //QUESTION
     createNewQuestion: async(data, stackId)=>{
         const endpoint = `/api/v2/question-stacks/question/${stackId}`; 
-        const token = authHeader();
-        const data2= JSON.stringify(data);
-        const headers =  {
-                'Content-Type': 'application/json',
-                ...token
-        };
-        return await postAd(endpoint, data2, {}, headers)
+        return await postAd(endpoint, data, {}, authHeader())
             .then((res) => {
-                return res;
+                return res.data;
             })
             .catch((err) => {
                 return err;
@@ -129,15 +118,10 @@ const questionApi = {
     //TESTCASE 
     createNewTestcase: async(data, questionId)=>{
         const endpoint = `/api/v2/question-stacks/test-cases/${questionId}`; 
-        const token = authHeader();
-        const data2= JSON.stringify(data);
-        const headers =  {
-                'Content-Type': 'application/json',
-                ...token
-        };
-        return await postAd(endpoint, data2, {}, headers)
+        return await postAd(endpoint, data, {}, authHeader())
             .then((res) => {
-                return res;
+                console.log(res.data);
+                return res.data;
             })
             .catch((err) => {
                 return err;

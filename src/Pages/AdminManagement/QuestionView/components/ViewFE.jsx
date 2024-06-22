@@ -17,7 +17,7 @@ const ViewFE = ({ question, questionIndex }) => {
                     <div className="row">
                         <div>
                             <label>Image</label>
-                            {question.template.url ? (
+                             {question?.template?.url ? (
                                 <div className="position-relative" style={{ width: '300px'}}>
                                 <img
                                     style={{ width: '300px', height: '250px', objectFit: 'cover', marginBottom: '20px' }} 
@@ -35,7 +35,7 @@ const ViewFE = ({ question, questionIndex }) => {
                     <div>
                         <label htmlFor="color">Color</label>
                         <div>
-                            {question.template.colorCode?.split(',').map((color, colorIdx) => { 
+                            {question?.template?.colorCode?.split(',').map((color, colorIdx) => { 
                                 if (!color) return;
                                 return (
                                     <div key={colorIdx}>
@@ -52,3 +52,5 @@ const ViewFE = ({ question, questionIndex }) => {
         </div>
     )
 }
+
+export default ViewFE;
