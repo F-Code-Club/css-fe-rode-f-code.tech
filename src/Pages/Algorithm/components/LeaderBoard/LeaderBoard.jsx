@@ -42,7 +42,7 @@ const LeaderBoard = () => {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        const newSocket = io('https://rode-be-f-code.tech/polls', {
+        const newSocket = io(`${import.meta.env.VITE_REACT_APP_BASE_URL}/polls`, {
             auth: {
                 token: `${localStorage.getItem('token')}`,
             },        });
