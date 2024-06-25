@@ -11,11 +11,11 @@ import hexagonal from '../../assets/Login/hexagonal.svg';
 import signal from '../../assets/Login/signal.svg';
 import x_blue from '../../assets/Login/x-blue.svg';
 import x_green from '../../assets/Login/x-green.svg';
+import { toastError, toastSuccess } from '../../components/Toast';
 // import GoogleSignInButton from '../../components/GoogleBtn';
 // import GoogleSignUpButton from '../../components/GoogleSignUp';
 import { LoginStyle } from './style';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import { FaRegUserCircle } from "react-icons/fa";
 import { RiLockPasswordFill, RiSpam2Fill } from "react-icons/ri";
 import { RxPaperPlane } from "react-icons/rx";
@@ -37,32 +37,37 @@ const Login = () => {
         setIsValidInput(defaultValid);
         if(!email && !password){
             setIsValidInput({isValidemail: false, isValidPassword: false});
-            toast.error("Please enter your username and password complete.");
+            toastError("Please enter your username and password complete.");
             return;
         }
         if(!email){
             setIsValidInput({...defaultValid, isValidemail: false});
-            toast.error("Please enter your username.");
+            toastError("Please enter your username.");
             return;
         }
         if(!password){
             setIsValidInput({...defaultValid, isValidPassword: false});
-            toast.error("Please enter your password.");
+            toastError("Please enter your password.");
             return;
         }
         const dangerousCharacters = /['"<>`]/;
         if (dangerousCharacters.test(email) && dangerousCharacters.test(password)) {
-            toast.error('Invalid input: Input contains dangerous characters');
+            toastError('Invalid input: Input contains dangerous characters');
         }else{
             setEmail(email.trim());
             setPassword(password.trim());
             const credentials = { email, password };
             await authApi.login(credentials).then((res)=>{
-                if (res.status == 400) {
-                    navigate('/login', { state: res.data });
-                } else if (res.status === 200) {
+                if (res.status == 400 ) {
+                    toastError('Login failed');
+                    navigate('/login');
+                }else if (res.status == 200) {
                     localStorage.setItem('token', res.data.token);
+                    toastSuccess('Login success');
                     navigate('/');
+                }else{
+                    toastError('Login failed');
+                    navigate('/login');
                 }
             });
         }
@@ -95,7 +100,7 @@ const Login = () => {
                             <form onSubmit={handleSubmit}>
                                <div className={isValidInput.isValidemail ? "inputWithIcon" : "inputUnValid inputWithIcon"}>
                                   <FaRegUserCircle idName="iconUser" className={isValidInput.isValidemail ? 'inputIcon' : 'unValid'}/>
-                                  <input placeholder='Username' type="text" value={email} onChange={(event) => setEmail(event.target.value)} />
+                                  <input placeholder='Email' type="text" value={email} onChange={(event) => setEmail(event.target.value)} />
                                 </div>
                                 <br/>
 

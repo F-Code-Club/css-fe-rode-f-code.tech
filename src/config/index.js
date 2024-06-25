@@ -2,8 +2,8 @@
 const publicRuntimeConfig = {
     NODE_ENV: import.meta.env.NODE_ENV || 'production',
     API_URL: import.meta.env.VITE_REACT_APP_BASE_URL,
-    API_ADMIN_URL: import.meta.env.VITE_REACT_APP_ADMIN_BASE_URL || "https://rode-be.f-code.tech",
-    LOCAL_STORAGE_TOKEN: import.meta.env.VITE_REACT_APP_TOKEN_NAME ,
+    API_AD_URL: import.meta.env.VITE_REACT_APP_V2_URL,
+    LOCAL_STORAGE_TOKEN: import.meta.env.VITE_REACT_APP_TOKEN_NAME,
     USER_ROOM_ID: import.meta.env.VITE_REACT_APP_USER_ROOM_ID,
 };
 
