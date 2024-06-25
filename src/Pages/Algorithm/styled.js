@@ -414,6 +414,7 @@ export const HeaderWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
+   
 `
 
 export const UserScore = styled.div`
@@ -433,11 +434,25 @@ export const DescriptionTitle = styled.h1`
 
 export const PlaceholderImage = styled.img`
   width: 100%;
+  max-width: 100%;
   height: auto;
-  max-height: 400px;
   object-fit: contain;
+  margin: 0 auto; // This centers the image if it's smaller than the container
+  display: block; // This removes any inline spacing
 `;
-
+export const PlaceholderIframe = styled.iframe`
+  width: 100%;
+  max-width: 640px;
+  height: 720px;
+  border: none;
+  margin: 0 auto;
+  display: block;
+`;
+export const ImageContainer = styled.div`
+  width: 100%;
+  max-width: 800px; // Adjust this value to match the width of your upper box
+  margin: 0 auto; // This centers the container
+`;
 export const ButtonWrapper = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -535,7 +550,7 @@ export const TestStatusHeader = styled.div`
   font-weight: bold;
 `;
 export const StatusBadge = styled.span`
-  color: ${props => props.status === 'Accepted' ? '#2cbb5d' : '#bf3c3e'};
+  color: ${props => props.status === 'Executed' ? '#2cbb5d' : '#bf3c3e'};
 `;
 export const RuntimeInfo = styled.span`
   color: #8c8c8c;

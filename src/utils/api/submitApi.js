@@ -1,5 +1,4 @@
 import { post, get } from '../ApiCaller';
-import Localstorage from '../Localstorage';
 import authHeader from './HeaderAuthorization';
 
 const submitApi = {
@@ -12,8 +11,6 @@ const submitApi = {
     const headers = {
       'Authorization': `Bearer ${token}`
     };
-    console.log('Headers:', headers);
-    console.log('token jwt:', token);
         return await post(endpoint, data, {}, headers)
             .then((res) => {
                 if (res.data.code !== 200) console.log(res.response);

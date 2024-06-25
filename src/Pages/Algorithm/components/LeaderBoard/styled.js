@@ -112,9 +112,16 @@ export const Timer = styled.div`
     padding: 0.375rem 2.25rem 0.375rem 0.75rem;
     border: 2px solid #00e7aa;
     /* shadow */
-    
+
     filter: drop-shadow(0px 2px 15px #00c994);
     border-radius: 15px;
+    position: absolute;
+    left: 50%;
+    top: 4%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 `;
 export const Title = styled.span`
     font-family: 'Quicksand';

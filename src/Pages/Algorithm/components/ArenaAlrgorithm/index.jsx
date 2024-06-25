@@ -133,7 +133,7 @@ const ArenaAlgorithm = () => {
 
     useEffect(() => {
         const stackId = room.questionStack.id;
-        console.log('stackId', stackId);
+       // console.log('stackId', stackId);
 
         const getUserInfo = async () => {
             try {
@@ -149,7 +149,7 @@ const ArenaAlgorithm = () => {
                 const code = room.code;
                 const questions = await fetchQuestions(code);
                 setQuestions(questions);
-                console.log("questions array are ", questions);
+                // console.log("questions array are ", questions);
                 if (questions.length > 0) {
                     const initialQuestionData = await fetchAQuestion(questions[0]);
                     setCurrentQuestionData(initialQuestionData);
@@ -186,9 +186,9 @@ const ArenaAlgorithm = () => {
 
     const handleSubmit = (callback) => {
         setTimeout(() => {
-            console.log('Code submitted!');
+            //console.log('Code submitted!');
             callback();
-        }, 2000);
+        }, 1000);
     };
 
     return (
@@ -207,6 +207,7 @@ const ArenaAlgorithm = () => {
                     currentQuestionData={currentQuestionData}
                     onSubmit={handleSubmit}
                     currentQuestionId={currentQuestionId} // Pass the currentQuestionId here
+                    room_id = {room.id}
                 />
             )}
         </RightSection1>

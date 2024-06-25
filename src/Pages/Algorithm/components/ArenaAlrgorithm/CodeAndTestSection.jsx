@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Spinner, Dropdown } from 'react-bootstrap';
 import { cpp } from '@codemirror/lang-cpp';
 import { java } from '@codemirror/lang-java';
+import { python } from '@codemirror/lang-python';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 import CodeMirror from '@uiw/react-codemirror';
 import submitApi from '../../../../utils/api/submitApi'; // Import submitApi
@@ -27,12 +28,12 @@ import {
     RuntimeInfo,
 } from '../../styled';
 
-const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }) => {
+const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, room_id }) => {
     const [testCases, setTestCases] = useState([]);
     const [maxSubmitTimes, setMaxSubmitTimes] = useState(currentQuestionData?.max_submit_time || 0);
-    const [submitTimes, setSubmitTimes] = useState(0);
+    const [submitTimes, setSubmitTimes] = useState(localStorage.getItem("submitTimes") || 0);
     const [code, setCode] = useState('');
-    const [selectedLanguage, setSelectedLanguage] = useState('java');
+    const [selectedLanguage, setSelectedLanguage] = useState('java'); // Default to Java
     const [currentCase, setCurrentCase] = useState(0);
     const [submitStatus, setSubmitStatus] = useState(true);
     const [oneTimeSubmit, setOneTimeSubmit] = useState(true);
@@ -45,16 +46,16 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }
             case 'C_CPP':
                 return '#include<stdio.h>\n\nint main() {\n    printf("Hello World\\n");\n    return 0;\n}';
             case 'java':
-                return 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello World");\n    }\n}';
+                return 'public class Main {\n    public static void main(String[] args) {\n        System.out.println(\"Hello World\");\n    }\n}';
+            case 'python':
+                return 'print("Hello World")';
             default:
                 return '';
         }
     };
 
     useEffect(() => {
-        console.log('question data in code and test section:', currentQuestionData);
 
-        console.log("test cases:", currentQuestionData?.test_cases);
         setCode(getSampleCode(selectedLanguage));
         const storedLanguage = localStorage.getItem('language');
         if (storedLanguage) {
@@ -69,7 +70,6 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }
 
     const handleChange = (value) => {
         setCode(value);
-        localStorage.setItem('codeBE', value);
     };
 
     const handleSelectChange = (eventKey) => {
@@ -83,8 +83,11 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }
             case 'C_CPP':
                 return cpp();
             case 'java':
-            default:
                 return java();
+            case 'python':
+                return python();
+            default:
+                return java(); // Default to Java if language is not recognized
         }
     };
 
@@ -94,31 +97,40 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }
 
         const payload = {
             code: code,
-            language: selectedLanguage === 'C_CPP' ? 'C_CPP' : 'JAVA',
+            language: selectedLanguage === 'C_CPP' ? 'C_CPP' : selectedLanguage === 'python' ? 'PYTHON' : 'JAVA',
             question_id: currentQuestionId,
-            room_id: 2, // replace with the actual room_id
+            room_id: room_id, // replace with the actual room_id
         };
 
         try {
             const response = await submitApi.submit(payload);
-            // response is the result already
             const resultData = response;
             console.log("result data ", resultData);
 
-            if (resultData.type === 'Succeed') {
+            if (resultData.kind === 'CompilationError') {
                 setTestResults({
-                    status: 'Accepted',
-                    runTime: resultData.runtime,
+                    status: 'CompilationError',
+                    run_time: resultData.run_time,
+                    compilation_error: resultData.compilation_error,
                     score: resultData.score,
-                    input: testCases[currentCase]?.input || 'N/A',
-                    output: testCases[currentCase]?.output || 'N/A',
                 });
-            } else {
+            } else if (resultData.kind === 'Executed') {
+                const details = resultData.details.map((detail, index) => ({
+                    ...detail,
+                    input: testCases[index]?.input || 'N/A',
+                    output: testCases[index]?.output || 'N/A',
+                }));
+
                 setTestResults({
-                    status: 'Compilation Error',
-                    runTime: 'N/A',
-                    output: resultData.reason,
+                    status: 'Executed',
+                    run_time: resultData.run_time,
+                    score: resultData.score,
+                    details: details,
                 });
+
+                // Automatically select the first case in test results when switching tabs
+                setCurrentCase(0);
+                setActiveTab('testResults');
             }
 
             setSubmitStatus(true);
@@ -143,6 +155,7 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }
                 <Dropdown.Menu className="bg border transform menu">
                     <Dropdown.Item eventKey="C_CPP">C++</Dropdown.Item>
                     <Dropdown.Item eventKey="java">Java</Dropdown.Item>
+                    <Dropdown.Item eventKey="python">Python</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
 
@@ -168,7 +181,10 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }
                     </TabButton>
                     <TabButton
                         active={activeTab === 'testResults'}
-                        onClick={() => setActiveTab('testResults')}
+                        onClick={() => {
+                            setActiveTab('testResults');
+                            setCurrentCase(0); // Ensure first case is selected when switching to test results
+                        }}
                     >
                         Test Results
                     </TabButton>
@@ -192,7 +208,7 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }
                                     <p>No test cases available</p>
                                 )}
                             </CaseNavigation>
-                            {testCases.length > 0 ? (
+                            {testCases.length > 0 && (
                                 <>
                                     <h4>Input</h4>
                                     <TestCase>
@@ -203,51 +219,78 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId }
                                         <p>{testCases[currentCase]?.output || 'No output available'}</p>
                                     </TestCase>
                                 </>
-                            ) : (
-                                <p>No test cases to display</p>
                             )}
                         </TestCasesSection>
                     )}
 
                     {activeTab === 'testResults' && (
                         <TestResultsSection>
-                            <TestStatusHeader>
-                                <StatusBadge status={testResults?.status}>
-                                    {testResults?.status || 'Pending'}
-                                </StatusBadge>
-                                <RuntimeInfo>Runtime: {testResults.runTime}</RuntimeInfo>
-                            </TestStatusHeader>
-                            {testResults.status !== 'Accepted' && (
-                                <TestCase>
-                                    <p style={{ color: '#bf3c3e' }}>{testResults.output}</p>
-                                </TestCase>
-                            )}
-                            {testResults.status === 'Accepted' && (
-                                <InputOutput>
-                                    <h4>Input</h4>
-                                    <p>{testResults.input}</p>
-                                    <h4>Output</h4>
-                                    <p>{testResults.output}</p>
-                                    <h4>Score</h4>
-                                    <p>{testResults.score}</p>
-                                </InputOutput>
-                            )}
-                        </TestResultsSection>
-                    )}
-                </TestContent>
-            </TestSectionWrapper>
-
-            <ButtonWrapper>
-                <TestCase>Submit Times: {submitTimes}/{maxSubmitTimes}</TestCase>
-                <ButtonStyled buttonType="outline2" onClick={submitCode} disabled={!submitStatus || submitTimes >= maxSubmitTimes}>
-                    {submitStatus ? 'SUBMIT' : <Spinner size="sm" />}
-                </ButtonStyled>
-                <ButtonStyled buttonType="outline" onClick={finish} disabled={oneTimeSubmit}>
-                    FINISH
-                </ButtonStyled>
-            </ButtonWrapper>
-        </EditorAndTestWrapper>
-    );
-};
-
-export default CodeAndTestSection;
+                            <CaseNavigation>
+                                {testResults.details && testResults.details.length > 0 ? (
+                                    testResults.details.map((_, index) => (
+                                        <CaseButton
+                                            key={index}
+                                            active={index === currentCase}
+                                            onClick={() => setCurrentCase(index)}
+                                        >
+                                            Case {index + 1}
+                                        </CaseButton>
+                                    ))
+                                ) : (
+                                    <p>No test results available</p>
+                                )}
+                            </CaseNavigation>
+                            {testResults.details && testResults.details.length > 0 && (
+                                <>
+                                    <h4>Score: {testResults.score}</h4>
+                                    <TestStatusHeader>
+                                        <StatusBadge status={testResults.status}>
+                                            {testResults.status || 'Pending'}
+                                        </StatusBadge>
+                                        <RuntimeInfo>Runtime: {testResults.run_time}</RuntimeInfo>
+                                    </TestStatusHeader>
+                                    {testResults.status === 'CompilationError' && (
+                                        <TestCase>
+                                            <p style={{ color: '#bf3c3e' }}>{testResults.compilation_error}</p>
+                                        </TestCase>
+                                    )}
+                                    {testResults.status === 'Executed' && (
+                                        <div>
+                                            <InputOutput>
+                                                <h5>Status</h5>
+                                                <TestCase>
+                                                    <p style={{ color: testResults.details[currentCase].kind === 'Failed' ? '#bf3c3e' : '#2cbb5d' }}>{testResults.details[currentCase].kind}</p>
+                                                </TestCase>
+                                                {testResults.details[currentCase].runtime_error && (
+                                                    <>
+                                                        <h5>Runtime Error</h5>
+                                                        <TestCase>
+                                                            <p style={{ color: '#bf3c3e' }}>{testResults.details[currentCase].runtime_error}</p>
+                                                            </TestCase>
+                                                        </>
+                                                    )}
+                                                </InputOutput>
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </TestResultsSection>
+                        )}
+                    </TestContent>
+                </TestSectionWrapper>
+    
+                <ButtonWrapper>
+                    <TestCase>Submit Times: {submitTimes}/{maxSubmitTimes}</TestCase>
+                    <ButtonStyled buttonType="outline2" onClick={submitCode} disabled={!submitStatus || submitTimes >= maxSubmitTimes}>
+                        {submitStatus ? 'SUBMIT' : <Spinner size="sm" />}
+                    </ButtonStyled>
+                    <ButtonStyled buttonType="outline" onClick={finish} disabled={oneTimeSubmit}>
+                        FINISH
+                    </ButtonStyled>
+                </ButtonWrapper>
+            </EditorAndTestWrapper>
+        );
+    };
+    
+    export default CodeAndTestSection;
+    

@@ -9,7 +9,7 @@ export async function loaderInfoGG() {
 }
 export async function GetInfoRoomByCode({ params }) {
     const CodeID = params.id;
-    console.log(CodeID);
+    //console.log(CodeID);
     const info = await roomApi.getRoomByCode(CodeID);
     
     return info.data.data;

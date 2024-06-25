@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { fetchAQuestion } from '../../../../utils/api/questionStackAPI';
 import CountdownTimer from '../../../CssBattle/components/CountDown';
 import {
@@ -6,38 +6,60 @@ import {
     DescriptionHeader,
     QuestionSelect,
     DescriptionTitle,
-    PlaceholderImage,
     UserInfo,
     UserScore,
     HeaderWrapper,
+    ImageContainer,
+    PlaceholderIframe,
+    PlaceholderImage,
 } from '../../styled';
 import { Timer, Title } from '../LeaderBoard/styled';
-import { API_URL } from '../../../../config';
+
 const Description = ({ questions, timeRemaining, userInfo, onQuestionChange }) => {
     const [questionData, setQuestionData] = useState({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
-    //const [currentQuestionData, setCurrentQuestionData] = useState(null);
+    const [pdfUrl, setPdfUrl] = useState(null);
+    const iframeRef = useRef(null);
+    const containerRef = useRef(null);
+
     useEffect(() => {
-        // Fetch the initial question data if questions array is not empty
         if (questions.length > 0) {
             handleQuestionChange(questions[0]);
-            console.log("questions got passed from props:",questions);
         }
     }, [questions]);
-    
-    // useEffect(() => {
-    //     setCurrentQuestionData(questionData);
-    // }, [questionData]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (iframeRef.current && containerRef.current) {
+                const containerWidth = containerRef.current.offsetWidth;
+                const containerHeight = containerRef.current.offsetHeight;
+                iframeRef.current.style.width = `${containerWidth}px`;
+                iframeRef.current.style.height = `${containerHeight}px`;
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize(); // Call once to set initial size
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, [pdfUrl]);
 
     const handleQuestionChange = async (questionId) => {
-        console.log('Selected Question ID:', questionId); // Log the selected question ID
+        //console.log('Selected Question ID:', questionId);
         try {
             const data = await fetchAQuestion(questionId);
-            console.log("changed question data:",data);
+            //console.log("Changed question data:", data);
             setQuestionData(data);
             setCurrentQuestionIndex(questions.indexOf(questionId));
             onQuestionChange(questionId);
-           
+
+            if (data.template_buffer) {
+                const blob = new Blob([new Uint8Array(data.template_buffer)], { type: 'application/pdf' });
+                const url = URL.createObjectURL(blob);
+                setPdfUrl(url);
+            } else {
+                setPdfUrl(null);
+            }
         } catch (error) {
             console.error('Error fetching question:', error);
         }
@@ -75,14 +97,16 @@ const Description = ({ questions, timeRemaining, userInfo, onQuestionChange }) =
                 </HeaderWrapper>
             </DescriptionHeader>
             <DescriptionTitle>{questionData.title}</DescriptionTitle>
-            <PlaceholderImage
-                src={
-                    questionData?.template?.url
-                        ? `${questionData.template.url}`
-                        : 'https://via.placeholder.com/600x400'
-                }
-                alt={`${questionData?.template?.url}`}
-            />
+            <ImageContainer>
+                {pdfUrl ? (
+                    <PlaceholderIframe
+                        src={`${pdfUrl}#toolbar=0`} 
+                        title="PDF Viewer"
+                    />
+                ) : (
+                    <PlaceholderImage src="https://via.placeholder.com/640x480" alt="Placeholder" />
+                )}
+            </ImageContainer>
         </DescriptionWrapper>
     );
 };
