@@ -32,7 +32,6 @@ const RightSection = ({
     const roomInfo = useLoaderData();
 
     const [submitStatus, setSubmitStatus] = useState(true);
-
     const [oneTimeSubmit, setOneTimeSubmit] = useState(true);
     const [isLanguage, setIsLanguage] = useState(language ? true : false);
     const [select, setSelect] = useState(language ? language : 'Choose language');

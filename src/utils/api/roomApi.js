@@ -1,4 +1,4 @@
-import { post, get } from '../ApiCaller';
+import { post, get, getAd } from '../ApiCaller';
 import authHeader from './HeaderAuthorization';
 import localFileApi from './localFileApi';
 
@@ -9,7 +9,7 @@ const roomApi = {
 
         return await get(endpoint, data, authHeader())
             .then((res) => {
-                // if (res.data.code !== 200) console.log(res.response);
+                if (res.data.code !== 200) console.log(res.response);
                 return res;
             })
             .catch((err) => {
@@ -22,8 +22,8 @@ const roomApi = {
         return await get(endpoint, {}, { Authorization: 'Bearer ' + token });
     },
     getRoomByCode: async (code) => {
-        const endpoint = `/rooms/get-one-by-code/${code}`;
-        return await get(endpoint, {}, authHeader())
+        const endpoint = `/api/v2/rooms/code/${code}`;
+        return await getAd(endpoint, {}, authHeader())
             .then((res) => {
                 return res;
             })
@@ -32,8 +32,8 @@ const roomApi = {
             });
     },
     getRoomById: async (roomID) => {
-        const endpoint = `/rooms/get-one-by-id/${roomID}`;
-        return await get(endpoint, {}, authHeader())
+        const endpoint = `/api/v2/rooms/${roomID}`;
+        return await getAd(endpoint, {}, authHeader())
             .then((res) => {
                 return res;
             })
