@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
+import { basicSetup } from 'codemirror';
 import { Spinner, Dropdown } from 'react-bootstrap';
+import { WebsocketProvider } from 'y-websocket';
+import * as Y from 'yjs';
 
 // Import submitApi
 import ButtonStyled from '../../../../components/Button';
@@ -26,22 +29,37 @@ import {
 } from '../../styled';
 import ErrorPopup from './ErrorPopup';
 
+import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
 import { java } from '@codemirror/lang-java';
 import { python } from '@codemirror/lang-python';
+import { EditorState } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
+import { dropCursor } from '@codemirror/view';
+import {
+    highlightSpecialChars,
+    drawSelection,
+    highlightActiveLine,
+    keymap,
+} from '@codemirror/view';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
-import CodeMirror from '@uiw/react-codemirror';
+import { yCollab } from 'y-codemirror.next';
 
 // Import the ErrorPopup component
 
-const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, room_id }) => {
+const CodeAndTestSection = ({
+    onSubmit,
+    currentQuestionData,
+    currentQuestionId,
+    room_id,
+    userInfo,
+}) => {
     const [testCases, setTestCases] = useState([]);
+    const [selectedLanguage, setSelectedLanguage] = useState('java'); // Default to Java
     const [maxSubmitTimes, setMaxSubmitTimes] = useState(currentQuestionData?.max_submit_time || 0);
     const [submitTimes, setSubmitTimes] = useState(
         parseInt(localStorage.getItem('submitTimes')) || 0
     );
-    const [code, setCode] = useState('');
-    const [selectedLanguage, setSelectedLanguage] = useState('java'); // Default to Java
     const [currentCase, setCurrentCase] = useState(0);
     const [submitStatus, setSubmitStatus] = useState(true);
     const [runStatus, setRunStatus] = useState(true); // Separate state for run button status
@@ -55,54 +73,125 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
             case 'C_CPP':
                 return '#include<stdio.h>\n\nint main() {\n    printf("Hello World\\n");\n    return 0;\n}';
             case 'java':
-                return "import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int number = scanner.nextInt();\n        System.out.println(number);\n    }\n}";
+                return 'import java.util.Scanner;\n\npublic class Main {\n    public static void main(String[] args) {\n        Scanner scanner = new Scanner(System.in);\n        int number = scanner.nextInt();\n        System.out.println(number);\n    }\n}';
             case 'python':
                 return 'print("Hello World")';
             default:
                 return '';
         }
     };
+    const [oneTimeSet, setOneTimeSet] = useState(false);
+    const [code, setCode] = useState('');
+
+    const editorRef = useRef(null);
 
     useEffect(() => {
-        setCode(getSampleCode(selectedLanguage));
+        // Create a Yjs document
+        const ydoc = new Y.Doc();
+
+        // Create a WebRTC provider to enable collaborative editing
+        const provider = new WebsocketProvider(
+            'wss://demos.yjs.dev/ws',
+            `${currentQuestionId}/1`,
+            ydoc
+        );
+
+        provider.awareness.setLocalStateField('user', {
+            name: `${userInfo? userInfo.full_name : 'Unknown'}`,
+        });
+
+        // Create a shared Yjs text type
+        const yText = ydoc.getText('codemirror');
+
+        // ftener to handle editor updates
+        const updateListener = EditorView.updateListener.of((update) => {
+            if (update.docChanged) {
+                let value = update.state.doc.toString();
+                setCode(value);
+                localStorage.setItem(`code_${currentQuestionId}_${selectedLanguage}`, value);
+            }
+        });
+
+        // Function to get the appropriate language extension
+        const getLanguageExtension = () => {
+            switch (selectedLanguage) {
+                case 'C_CPP':
+                    return cpp();
+                case 'java':
+                    return java();
+                case 'python':
+                    return python();
+                default:
+                    return java();
+            }
+        };
+
+        // Create an EditorState instance with the collaborative plugin
+        const state = EditorState.create({
+            doc: yText.toString(),
+            extensions: [
+                basicSetup,
+                highlightSpecialChars(),
+                drawSelection(),
+                dropCursor(),
+                highlightActiveLine(),
+                keymap.of(defaultKeymap),
+                yCollab(yText, provider.awareness),
+                updateListener,
+                getLanguageExtension(),
+                vscodeDark,
+                EditorView.theme({
+                    '&.cm-editor': { height: 'calc(100vh - 250px)', width: '100%' },
+                    '&.cm-editor .cm-scroller': { overflow: 'auto' },
+                }),
+            ],
+        });
+
+        // Create an EditorView instance and attach it to the DOM
+        const view = new EditorView({
+            state,
+            parent: editorRef.current,
+        });
+
+        return () => {
+            view.destroy();
+            provider.destroy();
+        };
+    }, [currentQuestionId, selectedLanguage]); // Add selectedLanguage as a dependency
+
+    useEffect(() => {
         const storedLanguage = localStorage.getItem('language');
         if (storedLanguage) {
             setSelectedLanguage(storedLanguage);
         }
-
+    
+        // Load the code for the current question and language
+        const storedCode = localStorage.getItem(`code_${currentQuestionId}_${selectedLanguage}`);
+        if (storedCode) {
+            setCode(storedCode);
+        }
+    
         if (currentQuestionData?.test_cases) {
             setTestCases(currentQuestionData.test_cases);
         }
         setMaxSubmitTimes(currentQuestionData?.max_submit_time || null);
     }, [currentQuestionData, selectedLanguage]);
 
-    const handleChange = (value) => {
-        setCode(value);
-    };
-
     const handleSelectChange = (eventKey) => {
         setSelectedLanguage(eventKey);
         localStorage.setItem('language', eventKey);
-        setCode(getSampleCode(eventKey));
-    };
-
-    const getLanguageExtension = () => {
-        switch (selectedLanguage) {
-            case 'C_CPP':
-                return cpp();
-            case 'java':
-                return java();
-            case 'python':
-                return python();
-            default:
-                return java(); // Default to Java if language is not recognized
+        
+        const storedCode = localStorage.getItem(`code_${currentQuestionId}_${eventKey}`);
+        if (storedCode) {
+            setCode(storedCode);
+        } else {
+            setCode('');
         }
     };
-
     const submitCode = async () => {
         setSubmitStatus(false);
         setShowResult(true);
-    
+
         const payload = {
             code: code, // Use the current code state from CodeMirror
             language:
@@ -112,14 +201,14 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
                     ? 'PYTHON'
                     : 'JAVA',
             question_id: currentQuestionId,
-            room_id: 2, // replace with the actual room_id
+            room_code: room_id, // replace with the actual room_id
         };
-    
+
         try {
             const response = await submitApi.submit(payload);
             const resultData = response;
             console.log('result data ', resultData);
-    
+
             if (resultData.kind === 'CompilationError') {
                 setTestResults({
                     status: 'CompilationError',
@@ -135,20 +224,20 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
                     input: testCases[index]?.input || 'N/A',
                     output: testCases[index]?.output || 'N/A',
                 }));
-    
+
                 setTestResults({
                     status: 'Executed',
                     run_time: resultData.run_time,
                     score: resultData.score,
                     details: details,
                 });
-    
+
                 setActiveTab('testResults'); // Switch to test results tab
                 setCurrentCase(0); // Ensure first case is selected
             } else {
                 throw new Error(resultData.response.data.message);
             }
-    
+
             setSubmitStatus(true);
             setSubmitTimes((prevSubmitTimes) => {
                 const newSubmitTimes = prevSubmitTimes + 1;
@@ -168,7 +257,7 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
             setSubmitStatus(true);
         }
     };
-    
+
     const runCode = async () => {
         setRunStatus(false);
         console.log('In the run code function');
@@ -181,14 +270,13 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
                     ? 'PYTHON'
                     : 'JAVA',
             question_id: currentQuestionId,
-            room_id: 2, // replace with the actual room_id
+            room_code: room_id, // replace with the actual room_id
         };
-    
+
         try {
             const response = await submitApi.run(payload);
             const resultData = response.data; // Adjusted to access the nested data
             console.log('Run result data ', resultData);
-    
             if (resultData.kind === 'CompilationError') {
                 setTestResults({
                     status: 'CompilationError',
@@ -205,22 +293,22 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
                     input: testCases[index]?.input || 'N/A',
                     output: testCases[index]?.output || 'N/A',
                 }));
-    
+
                 setTestResults({
                     status: 'Executed',
                     run_time: resultData.run_time,
                     score: resultData.score,
                     details: details,
                 });
-    
+
                 // Automatically select the first case in test results when switching tabs
-    
+
                 setActiveTab('testResults');
                 setCurrentCase(0);
             } else {
                 throw new Error(resultData.message || 'Unexpected error occurred');
             }
-    
+
             setRunStatus(true);
         } catch (error) {
             console.error('Error running code:', error);
@@ -235,12 +323,10 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
             setRunStatus(true);
         }
     };
-    
 
     const closeErrorPopup = () => {
         setErrorMessage('');
     };
-
     return (
         <EditorAndTestWrapper>
             <Dropdown onSelect={handleSelectChange}>
@@ -254,15 +340,11 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
                 </Dropdown.Menu>
             </Dropdown>
             <BoxEditor showResult={showResult}>
-                <CodeMirror
+                <div
                     className="editor"
-                    value={code}
-                    theme={vscodeDark}
-                    height={showResult ? '60vh' : 'calc(100vh - 250px)'}
-                    maxHeight={showResult ? '60vh' : 'calc(100vh - 250px)'}
-                    extensions={[getLanguageExtension()]}
-                    onChange={handleChange}
-                />
+                    ref={editorRef}
+                    style={{ border: '1px solid black', height: '720px', width: '100%' }}
+                ></div>
             </BoxEditor>
             <TestSectionWrapper>
                 <TabsWrapper>
@@ -378,9 +460,10 @@ const CodeAndTestSection = ({ onSubmit, currentQuestionData, currentQuestionId, 
                                                     <p
                                                         style={{
                                                             color:
-                                                                    (testResults.details[currentCase]
-                                                                    .kind === 'Failed' 
-                                                                    || testResults.details[currentCase].kind === 'TimedOut') 
+                                                                testResults.details[currentCase]
+                                                                    .kind === 'Failed' ||
+                                                                testResults.details[currentCase]
+                                                                    .kind === 'TimedOut'
                                                                     ? '#bf3c3e'
                                                                     : '#2cbb5d',
                                                         }}

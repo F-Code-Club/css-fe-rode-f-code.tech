@@ -119,6 +119,7 @@ const ArenaAlgorithm = () => {
                         onSubmit={handleSubmit}
                         currentQuestionId={currentQuestionId} // Pass the currentQuestionId here
                         room_id={id}
+                        userInfo={user}
                     />
                 )}
             </RightSection1>
