@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import ButtonStyled from '../../../components/Button';
 import OffCanvasComponents from '../../../components/OffCanvas/OffCanvas';
 import roomApi from '../../../utils/api/roomApi';
-import { Box, TextStyled, StyledWrap } from '../styled';
+import {Box, TextStyled, StyledWrap, ScoreText} from '../styled';
 import Colors from './Colors';
 import CountdownTimer from './CountDown';
 import InfoItem from './InfoItem';
@@ -12,6 +12,7 @@ import Rank from './Rank';
 import Scores from './Score';
 
 import Stack from 'react-bootstrap/Stack';
+import {useLoaderData} from "react-router-dom";
 
 const RoomInfo = ({
     data,
@@ -27,16 +28,21 @@ const RoomInfo = ({
     const handleShow = () => setShow(true);
     const handleQuestionChange = () => {};
     const submitted = JSON.parse(localStorage.getItem('authenticated'));
+
+    const roomInfo = useLoaderData();
+
     const LIST_INFO = [
         {
             title: 'Questions',
             body: (
-                <Questions
-                    handleQuestionChange={QuestionChange}
-                    question={question}
-                    action={action}
-                    setCurrentQuestion={setCurrentQuestion}
-                />
+                <>
+                    <Questions
+                        handleQuestionChange={QuestionChange}
+                        question={question}
+                        action={action}
+                        setCurrentQuestion={setCurrentQuestion}
+                    />
+                </>
             ),
         },
         {
@@ -52,7 +58,7 @@ const RoomInfo = ({
             body: (
                 <Scores
                     submitTimes={data?.questions[currentQuestion].maxSubmitTimes}
-                    submit={submitted?.times ? submitted : submit}
+                    submit={submitted?.kind === 'Executed' ? submitted : submit}
                 />
             ),
         },
@@ -75,7 +81,8 @@ const RoomInfo = ({
                 <Rank rank={rank} />
             </OffCanvasComponents>
             <Stack direction="horizontal" className="justify-content-between mb-3">
-                <TextStyled>ROOM {data.code}</TextStyled>
+                <TextStyled>ROOM {data.id}</TextStyled>
+                {/*<TextStyled>Score <ScoreText>{roomInfo?.questions[currentQuestion]?.score}</ScoreText></TextStyled>*/}
             </Stack>
 
             <Box>

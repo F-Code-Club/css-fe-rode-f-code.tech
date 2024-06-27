@@ -1,6 +1,7 @@
 import Localstorage from '../../utils/Localstorage';
 import authApi from '../../utils/api/authApi';
 import roomApi from '../../utils/api/roomApi';
+import {fetchAQuestion, fetchQuestionStack} from "../../utils/api/questionStackAPI.js";
 
 export async function loaderInfoGG() {
     const credential = Localstorage.getCredential();
@@ -23,19 +24,45 @@ export async function GetInfoRoomByCodeCssBattle({ params }) {
         return Math.floor(diffInMs / 1000 / 60);
     }
     const data_base = {
-        questions: [{
-            codeTemplate: '',
-            questionImage: '',
-            colors: '#e26a53, #282c34, #f04338',
-            maxSubmitTimes: 3
-        }],
+        id: 0,
+        questions: [],
         duration: 10
     };
     const CodeID = params.id;
     const info = await roomApi.getRoomByCode(CodeID);
-    console.log(info.data)
+    if (info.status !== 200){
+        window.location.href = '/';
+        return;
+    }
+    data_base.id = CodeID;
+    const dataStack = await roomApi.getListQuestion(CodeID)
+    if (dataStack.status !== 200){
+        window.location.href = '/';
+        return;
+    }
+    // console.log(dataStack)
+    for (let question of dataStack.data){
+        let dataQuestion;
+        try {
+            dataQuestion = await fetchAQuestion(question);
+        } catch (e){
+            console.log(`question id ${question} error:`, e);
+            continue;
+        }
 
-    data_base.duration = getMinutesToClose(info.data.data.closeTime)
+        // console.log(dataQuestion)
+        if (true){ // TODO: non-filter question of css battle
+            data_base.questions.push({
+                id: question,
+                codeTemplate: '',
+                questionImage: "data:image/jpeg;base64,"+dataQuestion.template_buffer,
+                colors: dataQuestion.template.color_code ? dataQuestion.template.color_code : "",
+                maxSubmitTimes: dataQuestion.max_submit_time,
+                score: dataQuestion.score
+            });
+        }
+    }
+    data_base.duration = getMinutesToClose(info.data.close_time)
     // return info.data.data;
     return data_base
 }

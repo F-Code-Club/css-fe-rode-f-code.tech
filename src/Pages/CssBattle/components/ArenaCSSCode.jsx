@@ -8,18 +8,16 @@ import OffCanvasComponents from '../../../components/OffCanvas/OffCanvas';
 import { toastSuccess, toastError } from '../../../components/Toast';
 import { USER_ROOM_ID } from '../../../config';
 import submitApi from '../../../utils/api/submitApi';
-import submitHistoryApi from '../../../utils/api/submitHistoryApi';
+
 import userRoomApi from '../../../utils/api/userRoomApi';
 import { BoxEditor, TextStyled, TextSmall } from '../styled';
 import MySolution from './MySolution';
 
-import { htmlLanguage } from '@codemirror/lang-html';
-// import { EditorView } from '@codemirror/view';
 import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
-import CodeMirror from '@uiw/react-codemirror';
 import Spinner from 'react-bootstrap/Spinner';
 import Stack from 'react-bootstrap/Stack';
 
+import { CodeTemplateTmp } from '../../../utils/Constant/Dummy';
 
 import * as Y from 'yjs';
 import { WebsocketProvider } from 'y-websocket'
@@ -32,7 +30,7 @@ import { highlightSpecialChars, drawSelection, highlightActiveLine, keymap } fro
 import { html } from '@codemirror/lang-html';
 import {basicSetup} from "codemirror";
 
-const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, showRoom, currentQuestionID }) => {
+const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, showRoom, currentQuestionID, infoUser, teamID }) => {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const [userSubmit, setUserSubmit] = useState([]);
@@ -45,43 +43,31 @@ const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, sho
 
     const submitCode = async () => {
         setSubmitStatus(false);
-        // testing result
-        let res_test = await submitApi.diff_css({
-            html: code,
-            question_id: currentQuestionID
-        });
-
-        console.log(data)
-
-        setSubmitStatus(true);
         const formatData = {
-            // TODO: Back-end edit params room_id, wait process
-            room_id: 1,
+            room_code: data.id,
             question_id: currentQuestionID,
             code: code,
             language: "CSS"
         };
 
         const res = await submitApi.submit(formatData);
-
-        if (res.data.status === 200) {
+        if (res?.status === 200) {
             setOneTimeSubmit(false);
-            submitService.setSubmit(res.data.data);
             setSubmitStatus(true);
-            localStorage.setItem('authenticated', JSON.stringify(res.data.data));
-            toastSuccess(res.data.message);
-        } else if (res.data.status === 400) {
+            localStorage.setItem('authenticated', JSON.stringify(res.data));
+            toastSuccess("Successfully.");
+        } else {
             setSubmitStatus(true);
-            toastError(res.data.err);
+            toastError(res.response.data.message);
         }
     };
     function deleteCookies(name) {
         cookies.remove(name, { path: '/' });
     }
     const finish = async () => {
-        let res = await userRoomApi.postFinish(cookies.userroomid);
-
-        if (res.data.status === 200) {
+        // let res = await userRoomApi.postFinish(cookies.userroomid);
+        //
+        // if (res.data.status === 200) {
             navigate('/', { state: { success: true } });
             localStorage.removeItem('code');
             localStorage.removeItem('authenticated');
@@ -89,27 +75,34 @@ const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, sho
             cookies.remove(USER_ROOM_ID, { path: '/' });
             deleteCookies(USER_ROOM_ID);
             toastSuccess(res.data.message);
-        }
+        // }
     };
 
     const editorRef = useRef(null);
 
     useEffect(() => {
+        setCode('');
+        localStorage.setItem('code', '');
+        if (!currentQuestionID) return;
         // Create a Yjs document
         const ydoc = new Y.Doc();
 
         // Create a WebRTC provider to enable collaborative editing
         const provider = new WebsocketProvider(
             'wss://demos.yjs.dev/ws',
-            `${currentQuestionID}/1`,
+            `${currentQuestionID}/${teamID}`,
             ydoc);
 
         provider.awareness.setLocalStateField('user', {
-            name: 'yes'
+            name: infoUser.full_name
         });
         // Create a shared Yjs text type
         const yText = ydoc.getText('codemirror');
-
+        provider.on('synced', () => {
+            if (yText.toString().length === 0) {
+                yText.insert(0, CodeTemplateTmp);
+            }
+        });
         // Listener to handle editor updates
         const updateListener = EditorView.updateListener.of((update) => {
             if (update.docChanged) {

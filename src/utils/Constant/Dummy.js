@@ -1,2 +1,3 @@
 export const CodeTemplateTmp =
-    '<div></div>\n<style>\n  div {\n    width: 100px;\n    height: 100px;\n    background: #dd6b4d;\n  }\n</style>\n\n<!-- OBJECTIVE -->\n<!-- Write HTML/CSS in this editor and replicate the given target image in the least code possible. What you write here, renders as it is -->\n\n<!-- SCORING -->\n<!-- The score is calculated based on the number of characters you use (this comment included :P) and how close you replicate the image. Read the FAQS (https://cssbattle.dev/faqs) for more info. -->\n\n<!-- IMPORTANT: remove the comments before submitting -->';
+    '<div></div>\n<style>\n  div {\n    width: 100px;\n    height: 100px;\n    background: #dd6b4d;\n  }\n</style>\n'+
+    '<!-- Good luck to you :3 -->'
