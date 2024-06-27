@@ -20,6 +20,18 @@ const submitApi = {
                 return err;
             });
     },
+    run: async (data) => {
+        const endpoint = `/scoring/run`;
+        // eslint-disable-next-line no-return-await
+
+        return await post(endpoint, data, {}, authHeader())
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
     submitV2: async (data) => {
         const endpoint = `/scoring/submit-v2`;
         // eslint-disable-next-line no-return-await

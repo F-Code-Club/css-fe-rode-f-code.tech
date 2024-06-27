@@ -22,8 +22,8 @@ const roomApi = {
         return await get(endpoint, {}, { Authorization: 'Bearer ' + token });
     },
     getRoomByCode: async (code) => {
-        const endpoint = `/api/v2/rooms/code/${code}`;
-        return await getAd(endpoint, {}, authHeader())
+        const endpoint = `/room/get?room_code=${code}`;
+        return await get(endpoint, {}, authHeader())
             .then((res) => {
                 return res;
             })

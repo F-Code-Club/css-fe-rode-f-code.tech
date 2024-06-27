@@ -23,6 +23,7 @@ import UserLayoutComponent from '../components/UserLayout/UserLayout.component';
 import AdminRoute from './AdminRoute';
 import PublicRoute from './PublicRoute';
 import { loaderInfoGG, GetInfoRoomByCode, GetInfoUser } from './RouterLoader/Loader';
+import LeaderBoard from '../Pages/Algorithm/components/LeaderBoard/LeaderBoard';
 
 const RouterComponent = () => {
     const { width } = useWindowDimensions();
@@ -128,6 +129,11 @@ const RouterComponent = () => {
                             loader: GetInfoRoomByCode,
                             element: <Algorithm />,
                         },
+                        {
+                            exact: true,
+                            path: '/leaderboard',
+                            element: <LeaderBoard />,
+                        }
                     ],
                 },
             ],

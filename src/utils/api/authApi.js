@@ -29,6 +29,18 @@ const authApi = {
                 return err;
             });
     },
+    getUserInfo: async () => {
+        const endpoint = `/auth/self`;
+        // eslint-disable-next-line no-return-await
+
+        return await get(endpoint, {}, authHeader())
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    }
     // getInfoFromGG: async (credential) => {
     //     const endpoint = `/auth/get-info-from-google/${credential}`;
     //     // eslint-disable-next-line no-return-await

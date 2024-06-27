@@ -11,8 +11,8 @@ export async function GetInfoRoomByCode({ params }) {
     const CodeID = params.id;
     //console.log(CodeID);
     const info = await roomApi.getRoomByCode(CodeID);
-    
-    return info.data.data;
+    console.log(info);
+    return info.data;
 }
 export async function GetInfoUser() {
     const info = await authApi.getUser();
