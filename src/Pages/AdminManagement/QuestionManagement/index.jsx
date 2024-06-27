@@ -65,9 +65,8 @@ const QuestionManagement = () => {
             await questionApi.getStackByName(stackName)
                 .then((res)=> {
                     if (res != null){
-                        let arr = []
-                        arr.push(res);
-                        setListStack(arr); 
+                        console.log(res);
+                        setListStack(res);
                     }else{ 
                         setListStack([]);
                     }
@@ -77,7 +76,7 @@ const QuestionManagement = () => {
             }
       };
 
-    const handeStackName = (event) => {
+    const handleStackName = (event) => {
         setStackName(event.target.value);
     }
 
@@ -131,7 +130,7 @@ const QuestionManagement = () => {
             <Row className='subplacement'>
                 <Col className='searchArea'>
                     <IoSearchSharp className='icon'/>
-                    <input placeholder='Search name...' value={stackName} type="text" onChange={handeStackName} />
+                    <input placeholder='Search name...' value={stackName} type="text" onChange={handleStackName} />
                     <button onClick={handleSearch}>Search</button>
                 </Col>
                 <Col className='statusArea'>
@@ -153,7 +152,7 @@ const QuestionManagement = () => {
             <Row className="inforBoard"> 
                     { (listStack.length > 0)
                     ? (<div className='inforBoard-box'>
-                        <Row className='colName'>
+                        <Row className='borderBottom colName'>
                             <Col>Name</Col>
                             <Col>Type</Col>
                             <Col>Status</Col>
@@ -162,10 +161,10 @@ const QuestionManagement = () => {
                                 <IoArrowDownOutline className='icon' /> 
                             </Col>
                             <Col className='optionCol'>Option</Col>
-                             <hr/>
+                            {/* <hr/> */}
                         </Row>
                         {listStack.map(element => (
-                            <Row key={element.id} className='inforBoard-box--column tableContent'>
+                            <Row key={element.id} className='borderBottom inforBoard-box--column tableContent'>
                                 <Col>{element.name}</Col>
                                 <Col>{element.type}</Col>
                                 <Col>{element.status}</Col>
@@ -175,7 +174,7 @@ const QuestionManagement = () => {
                                     <button className='edit' onClick={() =>handleEdit(element.id)}>Edit</button>
                                     <button className='delete' onClick={() => handleDelete(element.id, element.name)}>Delete</button>
                                 </Col>
-                                <hr />
+                                
                             </Row>))}
                             <Modal className='popUp' show={showConfirmModal} onHide={handleCancelDelete} centered>
                                 <Modal.Header closeButton>

@@ -17,8 +17,10 @@ const ViewFE = ({ question, questionIndex }) => {
                     <div className="row">
                         <div>
                             <label>Image</label>
+                            
                              {question?.template?.url ? (
                                 <div className="position-relative" style={{ width: '300px'}}>
+                                <input value={question.template.url}/>
                                 <img
                                     style={{ width: '300px', height: '250px', objectFit: 'cover', marginBottom: '20px' }} 
                                     src={question.template.url} 

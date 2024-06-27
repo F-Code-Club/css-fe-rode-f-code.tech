@@ -262,3 +262,12 @@ select{
     top: 150px;
     left: 450px;
 }
+
+.borderBottom{
+    border-bottom: 1px solid gray;
+    padding: 10px;
+
+    &:last-of-type{
+        border: none;
+    }
+}

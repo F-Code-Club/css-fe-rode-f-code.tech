@@ -48,13 +48,40 @@ const questionApi = {
         const endpoint = `/api/v2/question-stacks/${id}`; 
         return await getAd(endpoint,{}, authHeader())
             .then((res) => {
-                console.log(res.data);
                 return res.data;
             })
             .catch((err)=> {
                 return err;
             })
     },
+
+    getStackByName: async (name) => {
+    const data = [];
+    const statusList = ['DRAFT', 'ACTIVE', 'DE-ACTIVE', 'USED'];
+    const endpoint = `/api/v2/question-stacks`; 
+    const uniqueQuestions = new Set();
+
+    try {
+        const promises = statusList.map(async (status) => {
+            const res = await getAd(endpoint, status, authHeader());
+            const questionList = res.data.data;
+            if (questionList != null) {
+                questionList.forEach((q) => {
+                    if (q.name === name && !uniqueQuestions.has(q.id)) {  // Assuming each question has a unique 'id'
+                        console.log(q);
+                        data.push(q);
+                        uniqueQuestions.add(q.id);
+                    }
+                });
+            }
+        });
+
+        await Promise.all(promises);
+        return data;
+    } catch (err) {
+        return err;
+    }
+},
 
     deleteStack: async(id) => {
         const endpoint = `/api/v2/question-stacks/${id}`;
@@ -120,7 +147,6 @@ const questionApi = {
         const endpoint = `/api/v2/question-stacks/test-cases/${questionId}`; 
         return await postAd(endpoint, data, {}, authHeader())
             .then((res) => {
-                console.log(res.data);
                 return res.data;
             })
             .catch((err) => {
