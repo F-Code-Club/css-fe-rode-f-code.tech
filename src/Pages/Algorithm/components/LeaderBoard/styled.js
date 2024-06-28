@@ -373,7 +373,7 @@ export const TitleLB = styled.h2`
     font-weight: bold;
     text-align: center;
     text-shadow: rgb(0, 201, 148) 0px 2px 15px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 `;
 
 export const LeaderboardGrid = styled.div`

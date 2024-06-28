@@ -141,7 +141,7 @@ const CodeAndTestSection = ({
                 getLanguageExtension(),
                 vscodeDark,
                 EditorView.theme({
-                    '&.cm-editor': { height: 'calc(100vh - 250px)', width: '100%' },
+                    '&.cm-editor': { height: 'calc(100vh - 300px)', width: '100%' },
                     '&.cm-editor .cm-scroller': { overflow: 'auto' },
                 }),
             ],
