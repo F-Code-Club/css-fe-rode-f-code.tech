@@ -8,14 +8,14 @@ const useCountdown = (minutes) => {
     const [second, setSecond] = useState();
 
     useEffect(() => {
-        let future = localStorage.getItem('countdownFuture');
-
-        if (future) {
-            future = moment(future);
-        } else {
-            future = moment().add(minutes, 'minutes');
-            localStorage.setItem('countdownFuture', future.toString());
-        }
+        // let future = localStorage.getItem('countdownFuture');
+        //
+        // if (future) {
+        //     future = moment(future);
+        // } else {
+        let future = moment().add(minutes, 'minutes');
+        localStorage.setItem('countdownFuture', future.toString());
+        // }
         const intervalId = setInterval(() => {
             const now = moment();
             const diff = moment.duration(future.diff(now));

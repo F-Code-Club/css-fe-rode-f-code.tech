@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 import { useCookies } from 'react-cookie';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -8,19 +8,29 @@ import OffCanvasComponents from '../../../components/OffCanvas/OffCanvas';
 import { toastSuccess, toastError } from '../../../components/Toast';
 import { USER_ROOM_ID } from '../../../config';
 import submitApi from '../../../utils/api/submitApi';
-import submitHistoryApi from '../../../utils/api/submitHistoryApi';
+
 import userRoomApi from '../../../utils/api/userRoomApi';
 import { BoxEditor, TextStyled, TextSmall } from '../styled';
 import MySolution from './MySolution';
 
-import { htmlLanguage } from '@codemirror/lang-html';
-import { EditorView } from '@codemirror/view';
 import { tokyoNight } from '@uiw/codemirror-theme-tokyo-night';
-import CodeMirror from '@uiw/react-codemirror';
 import Spinner from 'react-bootstrap/Spinner';
 import Stack from 'react-bootstrap/Stack';
 
-const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, showRoom }) => {
+import { CodeTemplateTmp } from '../../../utils/Constant/Dummy';
+
+import * as Y from 'yjs';
+import { WebsocketProvider } from 'y-websocket'
+import { yCollab } from 'y-codemirror.next';
+import { EditorView, } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
+import { defaultKeymap } from '@codemirror/commands';
+import { dropCursor } from '@codemirror/view';
+import { highlightSpecialChars, drawSelection, highlightActiveLine, keymap } from '@codemirror/view';
+import { html } from '@codemirror/lang-html';
+import {basicSetup} from "codemirror";
+
+const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, showRoom, currentQuestionID, infoUser, teamID }) => {
     const [show, setShow] = useState(false);
     const handleShow = () => setShow(true);
     const [userSubmit, setUserSubmit] = useState([]);
@@ -34,31 +44,30 @@ const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, sho
     const submitCode = async () => {
         setSubmitStatus(false);
         const formatData = {
-            roomId: data?.id,
-            questionId: data?.questions[0].id,
+            room_code: data.id,
+            question_id: currentQuestionID,
             code: code,
+            language: "CSS"
         };
 
         const res = await submitApi.submit(formatData);
-
-        if (res.data.status === 200) {
+        if (res?.status === 200) {
             setOneTimeSubmit(false);
-            submitService.setSubmit(res.data.data);
             setSubmitStatus(true);
-            localStorage.setItem('authenticated', JSON.stringify(res.data.data));
-            toastSuccess(res.data.message);
-        } else if (res.data.status === 400) {
+            localStorage.setItem('authenticated', JSON.stringify(res.data));
+            toastSuccess("Successfully.");
+        } else {
             setSubmitStatus(true);
-            toastError(res.data.err);
+            toastError(res.response.data.message);
         }
     };
     function deleteCookies(name) {
         cookies.remove(name, { path: '/' });
     }
     const finish = async () => {
-        let res = await userRoomApi.postFinish(cookies.userroomid);
-
-        if (res.data.status === 200) {
+        // let res = await userRoomApi.postFinish(cookies.userroomid);
+        //
+        // if (res.data.status === 200) {
             navigate('/', { state: { success: true } });
             localStorage.removeItem('code');
             localStorage.removeItem('authenticated');
@@ -66,20 +75,77 @@ const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, sho
             cookies.remove(USER_ROOM_ID, { path: '/' });
             deleteCookies(USER_ROOM_ID);
             toastSuccess(res.data.message);
-        }
+        // }
     };
 
+    const editorRef = useRef(null);
+
     useEffect(() => {
-        let req = {
-            roomId: data?.id,
-        };
-        submitHistoryApi.getInfoSubmission(req).then((res) => {
-            if (res.data.status === 200) {
-                setUserSubmit([...res.data.data]);
+        setCode('');
+        localStorage.setItem('code', '');
+        if (!currentQuestionID) return;
+        // Create a Yjs document
+        const ydoc = new Y.Doc();
+
+        // Create a WebRTC provider to enable collaborative editing
+        const provider = new WebsocketProvider(
+            'wss://demos.yjs.dev/ws',
+            `${currentQuestionID}/${teamID}`,
+            ydoc);
+
+        provider.awareness.setLocalStateField('user', {
+            name: infoUser.full_name
+        });
+        // Create a shared Yjs text type
+        const yText = ydoc.getText('codemirror');
+        provider.on('synced', () => {
+            if (yText.toString().length === 0) {
+                yText.insert(0, CodeTemplateTmp);
             }
         });
-    }, [show]);
-    // questionResult.times.current === data?.questions[0].maxSubmitTimes;
+        // Listener to handle editor updates
+        const updateListener = EditorView.updateListener.of((update) => {
+            if (update.docChanged) {
+                let value = update.state.doc.toString();
+                setCode(value);
+                localStorage.setItem('code', value);
+                setCount(value.length);
+            }
+        });
+
+        // Create an EditorState instance with the collaborative plugin
+        const state = EditorState.create({
+            doc: yText.toString(),
+            theme: tokyoNight,
+            extensions: [
+                basicSetup,
+                highlightSpecialChars(),
+                drawSelection(),
+                dropCursor(),
+                highlightActiveLine(),
+                keymap.of(defaultKeymap),
+                yCollab(yText, provider.awareness),
+                updateListener,
+                html(),
+                tokyoNight,
+                EditorView.theme({
+                    '&.cm-editor': { height: 'calc(100vh - 200px)', width: '100%' },
+                    '&.cm-editor .cm-scroller': { overflow: 'auto' }
+                })
+            ]
+        });
+
+        // Create an EditorView instance and attach it to the DOM
+        const view = new EditorView({
+            state,
+            parent: editorRef.current
+        });
+        return () => {
+            view.destroy();
+            provider.destroy();
+        };
+    }, [currentQuestionID]);
+
     return (
         <>
             <OffCanvasComponents title="My Solution" show={show} setShow={setShow}>
@@ -91,25 +157,7 @@ const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, sho
                 <TextSmall>{count} characters</TextSmall>
             </Stack>
             <BoxEditor>
-                <CodeMirror
-                    className="editor"
-                    value={code}
-                    width="100%"
-                    theme={tokyoNight}
-                    height="calc(100vh - 200px);"
-                    extensions={[htmlLanguage, EditorView.lineWrapping]}
-                    basicSetup={{
-                        foldGutter: false,
-                        dropCursor: false,
-                        allowMultipleSelections: false,
-                        indentOnInput: false,
-                    }}
-                    onChange={(e) => {
-                        setCode(e);
-                        localStorage.setItem('code', e);
-                        setCount(e.length);
-                    }}
-                />
+                <div className="editor" ref={editorRef} style={{ border: '1px solid black', height: 'calc(100vh - 200px)', width: '100%' }}></div>
             </BoxEditor>
             <Stack
                 direction="horizontal"
@@ -124,9 +172,9 @@ const ArenaCSSCode = ({ setCode, setCount, count, code, data, submitService, sho
                     ROOM INFORMATION
                 </ButtonStyled>
 
-                <ButtonStyled buttonType="outline" onClick={handleShow}>
-                    MY SOLUTION
-                </ButtonStyled>
+                {/*<ButtonStyled buttonType="outline" onClick={handleShow}>*/}
+                {/*    MY SOLUTION*/}
+                {/*</ButtonStyled>*/}
                 <ButtonStyled buttonType="outline2" onClick={submitCode} disabled={!submitStatus}>
                     {submitStatus ? 'SUBMIT' : <Spinner size="sm" />}
                 </ButtonStyled>

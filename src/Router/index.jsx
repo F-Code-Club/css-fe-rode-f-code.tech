@@ -120,7 +120,7 @@ const RouterComponent = () => {
                         {
                             exact: true,
                             path: '/arena_css/:id',
-                            loader: GetInfoRoomByCode,
+                            loader: GetInfoRoomByCodeCssBattle,
                             element: <ArenaCSS />,
                         },
                         {

@@ -40,6 +40,18 @@ const authApi = {
             .catch((err) => {
                 return err;
             });
+    },
+    getTeamId: async () => {
+        const endpoint = `/team/get-id`;
+        // eslint-disable-next-line no-return-await
+
+        return await get(endpoint, {}, authHeader())
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
     }
     // getInfoFromGG: async (credential) => {
     //     const endpoint = `/auth/get-info-from-google/${credential}`;

@@ -22,8 +22,18 @@ const roomApi = {
         return await get(endpoint, {}, { Authorization: 'Bearer ' + token });
     },
     getRoomByCode: async (code) => {
-        const endpoint = `/room/get?room_code=${code}`;
-        return await get(endpoint, {}, authHeader())
+        const endpoint = `/room/get`;
+        return await get(endpoint, { room_code: code }, authHeader())
+            .then((res) => {
+                return res;
+            })
+            .catch((err) => {
+                return err;
+            });
+    },
+    getListQuestion: async (code) => {
+        const endpoint = `/question/get-by-room`;
+        return await get(endpoint, { room_code: code }, authHeader())
             .then((res) => {
                 return res;
             })
