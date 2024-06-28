@@ -1,12 +1,10 @@
+---
 name: Build and Deploy RODE FE
 on:
   push:
     branches:
       - main
-      - dev-cicd-sonarqube
-  pull_request:
-    branches:
-      - main
+      - dev
   workflow_dispatch:
 
 env:
@@ -57,6 +55,8 @@ jobs:
     needs: fe-build
     env:
       DOCKER_HUB_URL: ${{ secrets.F_CODE_DOCKER_REGISTRY_URL }}
+      VITE_REACT_APP_BASE_URL: ${{ secrets.VITE_REACT_APP_BASE_URL}}
+      VITE_REACT_APP_SOCKET_URL: ${{ secrets.VITE_REACT_APP_SOCKET_URL}}
     steps:
       - name: Checkout Develop
         uses: actions/checkout@v3
