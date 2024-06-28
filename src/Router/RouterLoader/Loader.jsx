@@ -13,7 +13,7 @@ export async function GetInfoRoomByCode({ params }) {
     //console.log(CodeID);
     const info = await roomApi.getRoomByCode(CodeID);
 
-    return info.data.data;
+    return info.data;
 }
 
 export async function GetInfoRoomByCodeCssBattle({ params }) {

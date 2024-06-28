@@ -22,7 +22,7 @@ import UserHomeLayout from '../components/UserHomeLayout/UserHomeLayout.componen
 import UserLayoutComponent from '../components/UserLayout/UserLayout.component';
 import AdminRoute from './AdminRoute';
 import PublicRoute from './PublicRoute';
-import { loaderInfoGG, GetInfoRoomByCode, GetInfoUser } from './RouterLoader/Loader';
+import { loaderInfoGG, GetInfoRoomByCode, GetInfoUser, GetInfoRoomByCodeCssBattle } from './RouterLoader/Loader';
 import LeaderBoard from '../Pages/Algorithm/components/LeaderBoard/LeaderBoard';
 
 const RouterComponent = () => {
