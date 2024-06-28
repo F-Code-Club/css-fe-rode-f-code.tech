@@ -9,63 +9,6 @@ import Nav from 'react-bootstrap/Nav';
 export const NavStyled = styled(Nav)`
     border: 1px solid #45ce7b;
 `;
-export const LeaderBoardStyled = styled.div`
-    padding: 20px;
-    background-color: #020d26;
-    min-height: 100vh;
-    overflow: hidden;
-    z-index: 0;
-    .flex {
-        display: flex;
-    }
-    .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0;
-    }
-    .bg-blue {
-        background-color: #020d26;
-    }
-    .m-0 {
-        margin: 0;
-    }
-    .p-0 {
-        padding: 0;
-    }
-    .w-100 {
-        width: 100% !important;
-    }
-    .bg-even {
-        background: #212529;
-    }
-    .bg-old {
-        background: transparent;
-    }
-    td {
-        color: #fff !important;
-        border-bottom: 1px solid rgb(0, 231, 170);
-    }
-    .color-green {
-        color: #00e7aa !important;
-    }
-`;
-
-export const HeaderLB = styled.div`
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    height: 60px;
-`;
-
-export const TitleLB = styled.h1`
-    font-size: 40px;
-    font-weight: 700;
-    color: #00e7aa;
-    @media screen and (max-width: 570px) {
-        font-size: 24px;
-    }
-`;
 
 export const QuestionLB = styled.select`
     width: 180px;
@@ -163,13 +106,22 @@ export const OptionStyled = styled.option``;
 export const Timer = styled.div`
     width: 200px;
     display: flex;
+    align-items: center;
     gap: 10px;
+    font-size: 20px;
     padding: 0.375rem 2.25rem 0.375rem 0.75rem;
     border: 2px solid #00e7aa;
     /* shadow */
 
     filter: drop-shadow(0px 2px 15px #00c994);
     border-radius: 15px;
+    position: absolute;
+    left: 50%;
+    top: 4%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
 `;
 export const Title = styled.span`
     font-family: 'Quicksand';
@@ -386,5 +338,88 @@ export const ChooseQWrapper = styled.div`
     }
     .menu {
         width: 100%;
+    }
+`;
+
+export const Container = styled.div`
+    position: relative;
+`;
+export const LeaderBoardStyled = styled.div`
+
+    background-color: #1e1e1e;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    max-width: 1200px;
+    max-height: 500px;
+    overflow-y: auto;
+    margin: 0 auto;
+    text-align: center;
+    z-index: 100;
+`;
+
+export const HeaderLB = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+`;
+
+export const TitleLB = styled.h2`
+    font-size: 3rem;
+    color: #e1fff3;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: rgb(0, 201, 148) 0px 2px 15px;
+    margin-bottom: 20px;
+`;
+
+export const LeaderboardGrid = styled.div`
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px 80px;
+    padding: 20px;
+    background-color: #2e2e2e;
+    border-radius: 10px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+`;
+export const LeaderboardItem = styled.div`
+    background-color: #e1fff3;
+    padding: 8px;
+    color: black;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 2px 1px 37px 11px rgba(84,194,142,0.39);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around
+
+;
+    align-items: center;
+
+    .rank {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #00ff00;
+        margin-right: 20px;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+
+    }
+
+    .name {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin: 0;
+    }
+
+    .university {
+        font-size: 1rem;
     }
 `;

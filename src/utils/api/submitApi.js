@@ -1,16 +1,20 @@
 import { post, get } from '../ApiCaller';
-import Localstorage from '../Localstorage';
 import authHeader from './HeaderAuthorization';
 
 const submitApi = {
     submit: async (data) => {
         const endpoint = `/scoring/submit`;
         // eslint-disable-next-line no-return-await
+        const token = localStorage.getItem('token');
 
-        return await post(endpoint, data, {}, authHeader())
+    // Include the token in the headers
+    const headers = {
+      'Authorization': `Bearer ${token}`
+    };
+        return await post(endpoint, data, {}, headers)
             .then((res) => {
-                // if (res.data.code !== 200) console.log(res.response);
-                return res;
+                if (res.data.code !== 200) console.log(res.response);
+                return res.data;
             })
             .catch((err) => {
                 return err;
