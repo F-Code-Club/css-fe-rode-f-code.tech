@@ -1,4 +1,4 @@
-import { useState, Suspense } from 'react';
+import {useState, Suspense, useEffect} from 'react';
 
 import { Container } from 'react-bootstrap';
 import { useLoaderData } from 'react-router-dom';
@@ -13,17 +13,18 @@ import RoomInfo from './components/RoomInfo';
 import { PaddingRow } from './styled';
 
 import Col from 'react-bootstrap/Col';
+import {GetInfoUser} from "../../Router/RouterLoader/Loader.jsx";
+import authApi from "../../utils/api/authApi.js";
 
 const ArenaCSS = () => {
     const roomInfo = useLoaderData();
-
     const currCode = localStorage.getItem('code');
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const codeTemplate = roomInfo?.questions[currentQuestion]?.codeTemplate
         ? roomInfo?.questions[currentQuestion].codeTemplate
         : CodeTemplateTmp;
     const [code, setCode] = useState(currCode ? currCode : codeTemplate);
-    const currQuestion = JSON.parse(localStorage.getItem('question'));
+    const currQuestion = null
     const [questionId, setQuestionId] = useState();
     const [question, setQuestion] = useState({
         current: currQuestion ? currQuestion.current : 'Choose question',
@@ -31,6 +32,35 @@ const ArenaCSS = () => {
             ? currQuestion.questionImg
             : roomInfo?.questions[currentQuestion]?.questionImage,
     });
+
+    const [infoUser, setInfoUser] = useState(null);
+    const [teamID, setTeamID] = useState(null);
+
+    useEffect(() => {
+        (async () => {
+            let info_user = await authApi.getTeamId();
+            console.log(info_user.status)
+            if (info_user.status === 200){
+                setTeamID(info_user.data);
+            }
+            console.log(teamID)
+        })();
+    }, []);
+
+    useEffect(() => {
+        (async () => {
+            let info_user = await authApi.getUserInfo();
+            console.log(info_user.status)
+            if (info_user.status === 200){
+                setInfoUser(info_user.data);
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        console.log(questionId, currentQuestion)
+    }, [questionId, currentQuestion])
+
     const handleQuestionChange = (eventKey, e) => {
         setQuestion({
             current: e.target.name,
@@ -84,6 +114,9 @@ const ArenaCSS = () => {
                     code={code}
                     data={roomInfo}
                     showRoom={setShow}
+                    currentQuestionID={questionId}
+                    infoUser={infoUser}
+                    teamID={teamID}
                 />
             </Col>
 

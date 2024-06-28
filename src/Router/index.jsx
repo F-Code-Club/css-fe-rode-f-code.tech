@@ -22,7 +22,8 @@ import UserHomeLayout from '../components/UserHomeLayout/UserHomeLayout.componen
 import UserLayoutComponent from '../components/UserLayout/UserLayout.component';
 import AdminRoute from './AdminRoute';
 import PublicRoute from './PublicRoute';
-import { loaderInfoGG, GetInfoRoomByCode, GetInfoUser } from './RouterLoader/Loader';
+import { loaderInfoGG, GetInfoRoomByCode, GetInfoUser, GetInfoRoomByCodeCssBattle } from './RouterLoader/Loader';
+import LeaderBoard from '../Pages/Algorithm/components/LeaderBoard/LeaderBoard';
 
 const RouterComponent = () => {
     const { width } = useWindowDimensions();
@@ -119,7 +120,7 @@ const RouterComponent = () => {
                         {
                             exact: true,
                             path: '/arena_css/:id',
-                            loader: GetInfoRoomByCode,
+                            loader: GetInfoRoomByCodeCssBattle,
                             element: <ArenaCSS />,
                         },
                         {
@@ -128,6 +129,11 @@ const RouterComponent = () => {
                             loader: GetInfoRoomByCode,
                             element: <Algorithm />,
                         },
+                        {
+                            exact: true,
+                            path: '/leaderboard',
+                            element: <LeaderBoard />,
+                        }
                     ],
                 },
             ],

@@ -18,9 +18,7 @@ import { Timer, Title } from '../LeaderBoard/styled';
 const Description = ({ questions, timeRemaining, userInfo, onQuestionChange }) => {
     const [questionData, setQuestionData] = useState({});
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(null);
-    const [pdfUrl, setPdfUrl] = useState(null);
-    const iframeRef = useRef(null);
-    const containerRef = useRef(null);
+    const [pdfUrl, setPdfUrl] = useState(null); // State to hold base 64 string
 
     useEffect(() => {
         if (questions.length > 0) {
@@ -28,35 +26,16 @@ const Description = ({ questions, timeRemaining, userInfo, onQuestionChange }) =
         }
     }, [questions]);
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (iframeRef.current && containerRef.current) {
-                const containerWidth = containerRef.current.offsetWidth;
-                const containerHeight = containerRef.current.offsetHeight;
-                iframeRef.current.style.width = `${containerWidth}px`;
-                iframeRef.current.style.height = `${containerHeight}px`;
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-        handleResize(); // Call once to set initial size
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, [pdfUrl]);
-
     const handleQuestionChange = async (questionId) => {
-        //console.log('Selected Question ID:', questionId);
         try {
             const data = await fetchAQuestion(questionId);
-            //console.log("Changed question data:", data);
             setQuestionData(data);
             setCurrentQuestionIndex(questions.indexOf(questionId));
             onQuestionChange(questionId);
 
+            // Assuming data.template_buffer is already in base 64 string format
             if (data.template_buffer) {
-                const blob = new Blob([new Uint8Array(data.template_buffer)], { type: 'application/pdf' });
-                const url = URL.createObjectURL(blob);
-                setPdfUrl(url);
+                setPdfUrl(data.template_buffer); // Set base 64 string directly
             } else {
                 setPdfUrl(null);
             }
@@ -69,7 +48,7 @@ const Description = ({ questions, timeRemaining, userInfo, onQuestionChange }) =
         <DescriptionWrapper>
             <DescriptionHeader>
                 <HeaderWrapper>
-                    <UserInfo>{userInfo.fullName}</UserInfo>
+                    <UserInfo><strong>User: </strong> {userInfo? (userInfo.full_name ? userInfo.full_name : 'Unknown') : 'Unknown'}</UserInfo>
                     <UserScore>
                         <strong>Score:</strong> {questionData.score ? questionData.score : 0}
                     </UserScore>
@@ -100,7 +79,7 @@ const Description = ({ questions, timeRemaining, userInfo, onQuestionChange }) =
             <ImageContainer>
                 {pdfUrl ? (
                     <PlaceholderIframe
-                        src={`${pdfUrl}#toolbar=0`} 
+                        src={`data:application/pdf;base64,${pdfUrl}`} // Use data URI with base 64 string
                         title="PDF Viewer"
                     />
                 ) : (

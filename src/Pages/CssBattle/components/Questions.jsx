@@ -11,6 +11,7 @@ const Questions = ({ handleQuestionChange, question, setCurrentQuestion, action 
         { name: 'CSS Battle', id: 3 },
     ];
     const roomInfo = useLoaderData();
+
     return (
         <TypeV2>
             <Dropdown className="d-inline mx-2" onSelect={handleQuestionChange}>
@@ -27,7 +28,7 @@ const Questions = ({ handleQuestionChange, question, setCurrentQuestion, action 
                                     key={id}
                                     name={`Question ${id + 1}`}
                                     onClick={() => {
-                                        const codeTemplate = roomInfo?.questions[id]?.codeTemplate;
+                                        // const codeTemplate = roomInfo?.questions[id]?.codeTemplate;
                                         action(question.id);
                                         setCurrentQuestion(id);
                                         // setShowImg(true);

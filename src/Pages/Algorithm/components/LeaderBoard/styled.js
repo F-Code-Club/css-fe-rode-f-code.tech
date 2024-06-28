@@ -116,6 +116,7 @@ export const Timer = styled.div`
     filter: drop-shadow(0px 2px 15px #00c994);
     border-radius: 15px;
     position: absolute;
+    z-index: 100;
     left: 50%;
     top: 4%;
     transform: translate(-50%, -50%);
@@ -372,7 +373,7 @@ export const TitleLB = styled.h2`
     font-weight: bold;
     text-align: center;
     text-shadow: rgb(0, 201, 148) 0px 2px 15px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 `;
 
 export const LeaderboardGrid = styled.div`

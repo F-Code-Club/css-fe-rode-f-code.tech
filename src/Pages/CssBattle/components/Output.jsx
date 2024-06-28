@@ -25,7 +25,8 @@ const Output = ({ code, data, currentQuestion }) => {
         setDiffChecked((state) => !state);
     };
 
-    const TestImg = localFileApi.getImg(data?.questions[currentQuestion]?.questionImage);
+    // const TestImg = localFileApi.getImg(data?.questions[currentQuestion]?.questionImage);
+    const TestImg = data?.questions[currentQuestion]?.questionImage;
     function imageCompareSlider(e) {
         if (slideChecked) {
             let t = e.nativeEvent;
