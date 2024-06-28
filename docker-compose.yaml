@@ -4,4 +4,5 @@ services:
     container_name: rode-battle-fe
     image: ${DOCKER_HUB_URL}/rode-battle-fe:latest
     ports:
-      - 5000:80
+      - 5000:5000
+    restart: unless-stopped
