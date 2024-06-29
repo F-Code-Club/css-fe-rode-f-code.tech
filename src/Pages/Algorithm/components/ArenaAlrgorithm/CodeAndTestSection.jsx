@@ -10,7 +10,6 @@ import ButtonStyled from '../../../../components/Button';
 import submitApi from '../../../../utils/api/submitApi';
 import {
     ButtonWrapper,
-    TestStatus,
     EditorAndTestWrapper,
     BoxEditor,
     TabsWrapper,
@@ -28,6 +27,8 @@ import {
     RuntimeInfo,
 } from '../../styled';
 import ErrorPopup from './ErrorPopup';
+import runCode from './runCode';
+import submitCode from './submitCode';
 
 import { defaultKeymap } from '@codemirror/commands';
 import { cpp } from '@codemirror/lang-cpp';
@@ -80,7 +81,6 @@ const CodeAndTestSection = ({
                 return '';
         }
     };
-    const [oneTimeSet, setOneTimeSet] = useState(false);
     const [code, setCode] = useState('');
 
     const editorRef = useRef(null);
@@ -97,7 +97,7 @@ const CodeAndTestSection = ({
         );
 
         provider.awareness.setLocalStateField('user', {
-            name: `${userInfo? userInfo.full_name : 'Unknown'}`,
+            name: `${userInfo ? userInfo.full_name : 'Unknown'}`,
         });
 
         // Create a shared Yjs text type
@@ -164,13 +164,13 @@ const CodeAndTestSection = ({
         if (storedLanguage) {
             setSelectedLanguage(storedLanguage);
         }
-    
+
         // Load the code for the current question and language
         const storedCode = localStorage.getItem(`code_${currentQuestionId}_${selectedLanguage}`);
         if (storedCode) {
             setCode(storedCode);
         }
-    
+
         if (currentQuestionData?.test_cases) {
             setTestCases(currentQuestionData.test_cases);
         }
@@ -180,7 +180,7 @@ const CodeAndTestSection = ({
     const handleSelectChange = (eventKey) => {
         setSelectedLanguage(eventKey);
         localStorage.setItem('language', eventKey);
-        
+
         const storedCode = localStorage.getItem(`code_${currentQuestionId}_${eventKey}`);
         if (storedCode) {
             setCode(storedCode);
@@ -188,140 +188,35 @@ const CodeAndTestSection = ({
             setCode('');
         }
     };
-    const submitCode = async () => {
-        setSubmitStatus(false);
-        setShowResult(true);
-
-        const payload = {
-            code: code, // Use the current code state from CodeMirror
-            language:
-                selectedLanguage === 'C_CPP'
-                    ? 'C_CPP'
-                    : selectedLanguage === 'python'
-                    ? 'PYTHON'
-                    : 'JAVA',
-            question_id: currentQuestionId,
-            room_code: room_id, // replace with the actual room_id
-        };
-
-        try {
-            const response = await submitApi.submit(payload);
-            const resultData = response;
-            console.log('result data ', resultData);
-
-            if (resultData.kind === 'CompilationError') {
-                setTestResults({
-                    status: 'CompilationError',
-                    run_time: resultData.run_time,
-                    compilation_error: resultData.compilation_error,
-                    score: resultData.score,
-                });
-                setActiveTab('testResults'); // Switch to test results tab
-                setCurrentCase(0); // Ensure first case is selected
-            } else if (resultData.kind === 'Executed') {
-                const details = resultData.details.map((detail, index) => ({
-                    ...detail,
-                    input: testCases[index]?.input || 'N/A',
-                    output: testCases[index]?.output || 'N/A',
-                }));
-
-                setTestResults({
-                    status: 'Executed',
-                    run_time: resultData.run_time,
-                    score: resultData.score,
-                    details: details,
-                });
-
-                setActiveTab('testResults'); // Switch to test results tab
-                setCurrentCase(0); // Ensure first case is selected
-            } else {
-                throw new Error(resultData.response.data.message);
-            }
-
-            setSubmitStatus(true);
-            setSubmitTimes((prevSubmitTimes) => {
-                const newSubmitTimes = prevSubmitTimes + 1;
-                localStorage.setItem('submitTimes', newSubmitTimes);
-                return newSubmitTimes;
-            });
-        } catch (error) {
-            console.error('Error submitting code:', error);
-            let errorMessage = 'An error occurred while submitting the code.';
-            if (error.response && error.response.data && error.response.data.message) {
-                errorMessage = error.response.data.message;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-            setErrorMessage(errorMessage);
-            console.log('Current payload:', payload); // Log the payload for debugging
-            setSubmitStatus(true);
-        }
+    const handleSubmitCode = () => {
+        submitCode(
+            code,
+            selectedLanguage,
+            currentQuestionId,
+            room_id,
+            setSubmitStatus,
+            setShowResult,
+            setTestResults,
+            setActiveTab,
+            setCurrentCase,
+            setSubmitTimes,
+            setErrorMessage,
+            testCases
+        );
     };
-
-    const runCode = async () => {
-        setRunStatus(false);
-        console.log('In the run code function');
-        const payload = {
-            code: code, // Use the current code state from CodeMirror
-            language:
-                selectedLanguage === 'C_CPP'
-                    ? 'C_CPP'
-                    : selectedLanguage === 'python'
-                    ? 'PYTHON'
-                    : 'JAVA',
-            question_id: currentQuestionId,
-            room_code: room_id, // replace with the actual room_id
-        };
-
-        try {
-            const response = await submitApi.run(payload);
-            const resultData = response.data; // Adjusted to access the nested data
-            console.log('Run result data ', resultData);
-            if (resultData.kind === 'CompilationError') {
-                setTestResults({
-                    status: 'CompilationError',
-                    run_time: 0,
-                    compilation_error: resultData.compilation_error,
-                    score: resultData.score,
-                    details: null,
-                });
-                setActiveTab('testResults'); // Switch to test results tab
-                setCurrentCase(0); // Ensure first case is selected
-            } else if (resultData.kind === 'Executed') {
-                const details = resultData.details.map((detail, index) => ({
-                    ...detail,
-                    input: testCases[index]?.input || 'N/A',
-                    output: testCases[index]?.output || 'N/A',
-                }));
-
-                setTestResults({
-                    status: 'Executed',
-                    run_time: resultData.run_time,
-                    score: resultData.score,
-                    details: details,
-                });
-
-                // Automatically select the first case in test results when switching tabs
-
-                setActiveTab('testResults');
-                setCurrentCase(0);
-            } else {
-                throw new Error(resultData.message || 'Unexpected error occurred');
-            }
-
-            setRunStatus(true);
-        } catch (error) {
-            console.error('Error running code:', error);
-            let errorMessage = 'An error occurred while running the code.';
-            if (error.response && error.response.data && error.response.data.message) {
-                errorMessage = error.response.data.message;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-            setErrorMessage(errorMessage);
-            console.log('Current payload:', payload); // Log the payload for debugging
-            setRunStatus(true);
-        }
+    const handleRunCode = () => {
+        runCode(
+            code,
+            selectedLanguage,
+            currentQuestionId,
+            room_id,
+            setRunStatus,
+            setTestResults,
+            setErrorMessage,
+            testCases,
+            setCurrentCase,
+            setActiveTab
+        );
     };
 
     const closeErrorPopup = () => {
@@ -461,29 +356,14 @@ const CodeAndTestSection = ({
                                                         style={{
                                                             color:
                                                                 testResults.details[currentCase]
-                                                                    .kind === 'Failed' ||
-                                                                testResults.details[currentCase]
-                                                                    .kind === 'TimedOut'
-                                                                    ? '#bf3c3e'
-                                                                    : '#2cbb5d',
+                                                                    .kind === 'Passed'
+                                                                    ? '#2cbb5d'
+                                                                    : '#bf3c3e',
                                                         }}
                                                     >
                                                         {testResults.details[currentCase].kind}
                                                     </p>
                                                 </TestCase>
-                                                {testResults.details[currentCase].runtime_error && (
-                                                    <>
-                                                        <h5>Runtime Error</h5>
-                                                        <TestCase>
-                                                            <p style={{ color: '#bf3c3e' }}>
-                                                                {
-                                                                    testResults.details[currentCase]
-                                                                        .runtime_error
-                                                                }
-                                                            </p>
-                                                        </TestCase>
-                                                    </>
-                                                )}
                                             </InputOutput>
                                         </div>
                                     </>
@@ -496,12 +376,12 @@ const CodeAndTestSection = ({
                 <TestCase>
                     Submit Times: {submitTimes}/{maxSubmitTimes}
                 </TestCase>
-                <ButtonStyled buttonType="outline" onClick={runCode}>
+                <ButtonStyled buttonType="outline" onClick={handleRunCode}>
                     {runStatus ? 'RUN' : <Spinner size="sm" />}
                 </ButtonStyled>
                 <ButtonStyled
                     buttonType="outline2"
-                    onClick={submitCode}
+                    onClick={handleSubmitCode}
                     disabled={!submitStatus || submitTimes >= maxSubmitTimes}
                 >
                     {submitStatus ? 'SUBMIT' : <Spinner size="sm" />}
