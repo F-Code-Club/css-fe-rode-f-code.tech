@@ -83,7 +83,7 @@ const Description = ({ questions, timeRemaining, userInfo, onQuestionChange }) =
                         title="PDF Viewer"
                     />
                 ) : (
-                    <PlaceholderImage src="https://via.placeholder.com/640x480" alt="Placeholder" />
+                    <PlaceholderImage src="https://placehold.it/640x480" alt="Placeholder" />
                 )}
             </ImageContainer>
         </DescriptionWrapper>
