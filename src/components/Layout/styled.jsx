@@ -26,6 +26,7 @@ export const Background = styled.div`
 
     background-image: ${({ url }) => (url ? `url(${url})` : null)};
     /* background-size: 100% 100%; */
+    background-color: #000000;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

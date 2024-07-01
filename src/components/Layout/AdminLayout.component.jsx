@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import { Outlet } from 'react-router-dom';
 
@@ -12,12 +12,17 @@ import { ContainerLayout, Body, Background, BackgroundGray } from './styled';
 
 const AdminLayoutComponent = () => {
     const { isLoading } = useAuth();
+    const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+
+    const toggleSidebar = () => {
+        setIsSidebarVisible(!isSidebarVisible);
+    };
     return (
-        <Background url={AdminBg}>
+        <Background>
             <ContainerLayout>
-                <HeaderComponent />
-                <Body>
-                    <Sidebar />
+                <HeaderComponent toggleSidebar={toggleSidebar}/>
+                <Body isSidebarVisible={isSidebarVisible}>
+                    <Sidebar isVisible={isSidebarVisible}/>
                     <ContentComponent layout={1}>
                         <Outlet />
                     </ContentComponent>

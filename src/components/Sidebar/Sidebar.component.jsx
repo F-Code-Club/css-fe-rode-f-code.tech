@@ -23,12 +23,12 @@ import {
 const infoItems = [
     {
         icon: <IconPerson />,
-        Info: 'Contestant',
+        Info: 'User Management',
         Action: '/contestant',
     },
     {
         icon: <i class="bi bi-door-open"></i>,
-        Info: 'Room',
+        Info: 'Room Management',
         Action: '/admin/room',
     },
     {
@@ -37,75 +37,36 @@ const infoItems = [
         Action: '/admin/leaderboard',
     },
     {
-        icon: <IconFile />,
-        Info: 'Content',
-        Action: '/admin/content',
-    },
+        icon: <IconChat />,
+        Info: 'Question',
+        Action: '/admin/question',
+    }
 ];
 
 const endItems = [
-    {
-        icon: <IconChat />,
-        Info: 'Feedback',
-        Action: '/admin/feedback',
-    },
-    {
-        icon: <i class="bi bi-gear"></i>,
-        Info: 'Settings',
-        Action: '/admin/settings',
-    },
+
+
 ];
-//   {
-//         icon: <IconLogOut />,
-//         Info: 'Log out',
-//         Action: '/login',
-//     },
-function Sidebar() {
+
+const Sidebar = ({ isVisible }) => {
     return (
-        <>
+        isVisible && (
             <Container>
                 <User>
-                    <IconUser></IconUser>
-
+                    <h2>Nguyen Van A</h2>
                     <p>Administrator</p>
                 </User>
                 <Pagination>
-                    <General>
-                        <BoldText>General</BoldText>
-                        <nav>
-                            <AdminBtn to="/admin/dashboard">
-                                <IconHouse />
-                                Dashboard
-                            </AdminBtn>
-                        </nav>
-                    </General>
                     <ContestInfo>
-                        <BoldText>Contest Information</BoldText>
                         <AdminEndBar>
                             <nav>
-                                {infoItems.map((el) => {
-                                    return (
-                                        <AdminBtn to={el.Action} key={el.Info}>
-                                            {el.icon}
-                                            {el.Info}
-                                        </AdminBtn>
-                                    );
-                                })}
-                            </nav>
-                        </AdminEndBar>
-                    </ContestInfo>
-                    <ContestInfo>
-                        <BoldText>Others</BoldText>
-                        <AdminEndBar>
-                            <nav>
-                                {endItems.map((el) => {
-                                    return (
-                                        <AdminBtn to={el.Action} key={el.Info}>
-                                            {el.icon}
-                                            {el.Info}
-                                        </AdminBtn>
-                                    );
-                                })}
+                                <BoldText>Information</BoldText>
+                                {infoItems.map((el) => (
+                                    <AdminBtn to={el.Action} key={el.Info}>
+                                        {el.icon}
+                                        {el.Info}
+                                    </AdminBtn>
+                                ))}
                                 <LogOutBtn to={'/login'} onClick={() => localStorage.clear()}>
                                     <IconLogOut /> Log out
                                 </LogOutBtn>
@@ -114,8 +75,8 @@ function Sidebar() {
                     </ContestInfo>
                 </Pagination>
             </Container>
-        </>
+        )
     );
-}
+};
 
 export default Sidebar;

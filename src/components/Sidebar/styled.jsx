@@ -13,14 +13,20 @@ import styled from 'styled-components';
 
 export const Container = styled.aside`
     width: 20%;
-    min-height: 87vh;
+    min-height: 88vh;
 
-    /* height: 100vh; */
-    background: #ffffff;
-    padding: 32px;
-    box-shadow: 6px 35px 24px rgba(0, 0, 0, 0.25);
-    border-radius: 20px 20px 0 0;
+    background: #1C1B1B;
+    padding: 10px;
+    border-top: solid 1.5px rgba(5, 183, 18, 0.5);
+    border-right: solid 1.5px rgba(5, 183, 18, 0.4);
+    border-radius: 4px 10px 0 0;
+    box-shadow: 0px 4px 8px rgba(5, 183, 18, 0.2), 
+                0px -4px 8px rgba(5, 183, 18, 0.2),
+                4px 0px 8px rgba(5, 183, 18, 0.2),
+                -4px 0px 8px rgba(5, 183, 18, 0.2);
     z-index: 1;
+    // transition: transform 0.3s ease-in-out;
+    // transform: ${({ isVisible }) => (isVisible ? 'translateX(0)' : 'translateX(-100%)')};
     a {
         color: #515151;
         text-decoration: none;
@@ -35,6 +41,8 @@ export const User = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    color: #ffffff;
+    margin: 50px 0;;
     div {
         font-family: 'Quicksand';
         font-style: normal;
@@ -42,12 +50,19 @@ export const User = styled.div`
         font-size: 1.4vw;
         line-height: 21px;
     }
-
+    h2 {
+        font-family: 'Quicksand';
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px;
+        margin-bottom: 25px;
+        font-size: 1.6vw;
+    }
     p {
         font-family: 'Quicksand';
         font-style: normal;
         font-weight: 500;
-        font-size: 1.3vw;
+        font-size: 1vw;
         line-height: 18px;
     }
 `;
@@ -113,8 +128,6 @@ export const Icon = styled.section`
 `;
 export const ContestInfo = styled.div`
     width: 100%;
-    /* height: calc(100% - 28%); */
-    /* margin-bottom: px; */
     display: flex;
     flex-direction: column;
     row-gap: 14px;
@@ -123,48 +136,48 @@ export const ContestInfo = styled.div`
         /* width: 95%; */
         display: flex;
         justify-content: space-between;
-        margin-left: 10px;
     }
 `;
 
 export const IconPerson = styled(PersonFill)`
     width: 20px;
-    height: 16px;
+    height: 20px;
 `;
 
 export const IconFile = styled(FileEarmarkText)`
     width: 20px;
-    height: 16px;
+    height: 20px;
 `;
 
 export const IconChat = styled(ChatDots)`
     width: 20px;
-    height: 16px;
+    height: 20px;
 `;
 
 export const IconSetting = styled(GearFill)`
     width: 20px;
-    height: 16px;
+    height: 20px;
 `;
 
 export const IconLogOut = styled(Power)`
     width: 20px;
-    height: 16px;
+    height: 20px;
 `;
 
 export const IconBarChart = styled(BarChartFill)`
     width: 20px;
-    height: 16px;
+    height: 20px;
 `;
 
 export const BoldText = styled.span`
     font-family: 'Quicksand';
     font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
+    font-weight: 650;
+    font-size: 24px;
     line-height: 22px;
-    color: #b0b0b0;
-    margin-bottom: 5px;
+    color: #ffffff;
+    width: 100%;
+    padding: 0.75rem;
 `;
 
 export const EndBar = styled.div`
@@ -209,9 +222,9 @@ export const AdminBtn = styled(NavLink)`
     width: 100%;
     font-style: normal;
     font-weight: 500;
-    font-size: 1.2vw;
+    font-size: 1.1vw;
     line-height: 21px;
-    color: ${({ active }) => (active ? '#ffffff' : '#515151')} !important;
+    color: ${({ active }) => (active ? '#ffffff' : '#ffffff')} !important;
     background-color: ${({ active }) => (active ? '#00E7AA' : 'transparent')};
     cursor: pointer;
     transition: 0.5s all;
@@ -232,15 +245,15 @@ export const LogOutBtn = styled(NavLink)`
     font-family: 'Quicksand';
     width: 100%;
     font-style: normal;
-    font-weight: 500;
+    font-weight: 900;
     font-size: 1.2vw;
     line-height: 21px;
-    color: ${({ active }) => (active ? '#ffffff' : '#515151')} !important;
+    color: ${({ active }) => (active ? '#ffffff' : '#F13F3F')} !important;
     background-color: ${({ active }) => (active ? '#00E7AA' : 'transparent')};
     cursor: pointer;
     transition: 0.5s all;
     border-radius: 4px;
-
+    margin-top: 100px;
     &:hover {
         background-color: #dc3545;
         color: #fff !important;
